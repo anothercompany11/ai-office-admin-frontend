@@ -11,14 +11,14 @@ const buttonVariants = cva(
       variant: {
         default: "bg-primary text-white disabled:bg-primary/10",
         pink: "bg-[#FF6668] text-white",
-        destructive: "bg-destructive text-destructive-foreground",
+        destructive: "border-status-error border text-status-error",
         outline: "border bg-white text-black disabled:bg-gray-100",
         "outline-black": "border border-black disabled:border-gray-300",
       },
       size: {
         default: "h-12 px-[15px] text-title-m",
         sm: "h-[30px] max-w-max rounded-sm px-3 py-1 subtitle-3",
-        md: "h-[37px] px-6 py-2 button-m-cta",
+        md: "h-[48px] px-6 py-2 text-title-s",
         lg: "h-[59px] rounded-md px-6 text-subtitle-l",
         icon: "size-9",
       },

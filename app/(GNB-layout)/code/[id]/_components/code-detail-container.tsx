@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import formattedDate from "@/util/date";
 import { useState } from "react";
 
 interface CodeDetailContainerProps {
@@ -39,55 +40,61 @@ export default function CodeDetailContainer({
   };
 
   return (
-    <div className="space-y-6 bg-white p-6 rounded-lg shadow">
+    <div className="bg-white border border-line rounded-lg w-full p-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl w-full font-semibold">상세정보</h2>
-        <div className="flex ml-auto w-full gap-2">
-          <Button size={"sm"} onClick={handleDelete}>삭제하기</Button>
+      <div className="flex overflow-hidden">
+        <h2 className="text-title-l mr-auto">상세정보</h2>
+        <div className="flex gap-2 max-w-max">
+          <Button size={"md"} variant={"destructive"} onClick={handleDelete}>
+            삭제하기
+          </Button>
           {isEditing ? (
             <>
-              <Button size={"sm"} onClick={handleCancel}>취소</Button>
-              <Button size={"sm"} onClick={handleSave}>저장</Button>
+              <Button size={"md"} variant={"outline"} onClick={handleCancel}>
+                취소하기
+              </Button>
+              <Button size={"md"} variant={"outline"} onClick={handleSave}>
+                저장하기
+              </Button>
             </>
           ) : (
-            <Button size={"sm"} onClick={() => setIsEditing(true)}>수정하기</Button>
+            <Button variant={"outline"} size={"md"} onClick={() => setIsEditing(true)}>
+              수정하기
+            </Button>
           )}
         </div>
       </div>
 
       {/* Details */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <p className="text-sm text-gray-500">학교 이름</p>
-          <p className="mt-1">{name}</p>
+      <div className="flex flex-col gap-6">
+        <div className="flex gap-3 items-center">
+          <p className="text-subtitle-m w-[120px]">학교 이름</p>
+          <p className="text-body-2 text-gray-800">{name}</p>
         </div>
-        <div>
-          <p className="text-sm text-gray-500">생성 코드</p>
-          <p className="mt-1 font-mono">{code}</p>
+        <div className="flex gap-3 items-center">
+          <p className="text-subtitle-m w-[120px]">생성 코드</p>
+          <p className="text-body-2 text-gray-800">{code}</p>
         </div>
-        <div>
-          <p className="text-sm text-gray-500">생성 일자</p>
-          <p className="mt-1">{created_at}</p>
+        <div className="flex gap-3 items-center">
+          <p className="text-subtitle-m w-[120px]">생성 일자</p>
+          <p className="text-body-2 text-gray-800">{formattedDate(created_at)}</p>
         </div>
-        <div>
-          <p className="text-sm text-gray-500">이용 가능 횟수</p>
-          <p className="mt-1">{prompt_count} / {prompt_limit}</p>
+        <div className="flex gap-3 items-center">
+          <p className="text-subtitle-m w-[120px]">이용 가능 횟수</p>
+          <p className="text-body-2 text-gray-800">
+            {prompt_count} / {prompt_limit}
+          </p>
         </div>
-        <div>
-          <p className="text-sm text-gray-500">채팅 상태</p>
-          <p className="mt-1">{is_limit_reached ? '불가능' : '가능'}</p>
+        <div className="flex gap-3 items-center">
+          <p className="text-subtitle-m w-[120px]">채팅 상태</p>
+          <p className="text-body-2 text-gray-800">{is_limit_reached ? "불가능" : "가능"}</p>
         </div>
-        <div className="col-span-2">
-          <p className="text-sm text-gray-500">관리자 메모</p>
+        <div className="flex gap-3">
+          <p className="text-subtitle-m w-[120px]">관리자 메모</p>
           {isEditing ? (
-            <Input
-              className="mt-1 w-full"
-              value={memo}
-              onChange={(e) => setMemo(e.target.value)}
-            />
+            <Input className=" w-full" value={memo} onChange={(e) => setMemo(e.target.value)} />
           ) : (
-            <p className="mt-1 whitespace-pre-wrap">{memo}</p>
+            <p className="text-body-2 text-gray-800">{memo}</p>
           )}
         </div>
       </div>
