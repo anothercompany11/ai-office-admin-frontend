@@ -67,7 +67,7 @@ const CustomInputField = <T extends FieldValues>({
       render={({ field }) => (
         <FormItem>
           {label ? (
-            <FormLabel className="mb-3 web:mb-2" htmlFor={name}>
+            <FormLabel className="mb-2" htmlFor={name}>
               {label}
             </FormLabel>
           ) : (

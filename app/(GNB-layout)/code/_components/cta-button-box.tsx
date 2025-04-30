@@ -32,8 +32,8 @@ const CTAButtonBox = ({ selectedIds, skip, limit }: CTAButtonBoxProps) => {
 
       {showDelModal && (
         <TwoButtonModal
-          title="선택한 코드를 삭제하시겠습니까?"
-          desc={`${selectedIds.length.toLocaleString()}개 삭제`}
+          title="선택한 코드를 삭제할까요?"
+          desc={`영구적으로 코드가 삭제됩니다.`}
           loading={isDeleting}
           buttonText="삭제"
           onClickFirstBtn={() => setShowDelModal(false)}
@@ -46,8 +46,8 @@ const CTAButtonBox = ({ selectedIds, skip, limit }: CTAButtonBoxProps) => {
 
       {showExtModal && (
         <TwoButtonModal
-          title="사용 가능 횟수를 연장하시겠습니까?"
-          desc={`${selectedIds.length.toLocaleString()}개 연장 (limit=5)`}
+          title="채팅 횟수를 연장할까요?"
+          desc={`1회 연장 시 5회가 추가됩니다.`}
           loading={isExtending}
           buttonText="연장"
           onClickFirstBtn={() => setShowExtModal(false)}

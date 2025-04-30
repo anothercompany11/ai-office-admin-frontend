@@ -24,8 +24,8 @@ const TwoButtonBar = ({
   // 첫 번째 버튼(목록으로 버튼) 핸들러
   const onClickBack = () => router.back();
   return (
-    <div className="flex max-w-max items-center gap-2">
-      <Button type="button" onClick={onClickFirstBtn ?? onClickBack}>
+    <div className="flex items-center gap-2">
+      <Button variant={"outline"} type="button" onClick={onClickFirstBtn ?? onClickBack}>
         {firstBtnTxt}
       </Button>
       <Button
