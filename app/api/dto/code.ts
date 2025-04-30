@@ -44,3 +44,11 @@ export interface CodeListRes {
   meta: ResponseMeta | null;
   errors: ResponseError[] | null;
 }
+
+// 코드 생성 요청
+export interface CodeCreateReq {
+  name: string; // 학교명
+  description: string; // 설명
+  prompt_limit: number; // 대화 요청 가능 횟수
+  count: number; // 생성할 개수
+}

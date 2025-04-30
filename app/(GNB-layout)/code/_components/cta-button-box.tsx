@@ -1,23 +1,24 @@
+"use client";
 import { Code } from "@/app/api/dto/code";
+import CodeCreateModal from "./code-create-modal";
+
 
 interface CTAButtonBoxProps {
   selectedIds: Array<Code["id"]>;
+  skip: number;
+  limit: number;
 }
-const CTAButtonBox = ({ selectedIds }: CTAButtonBoxProps) => {
-  const logIds = (action: string) => () => console.log(`${action}:`, selectedIds);
 
+export default function CTAButtonBox({ selectedIds, skip, limit }: CTAButtonBoxProps) {
   return (
     <div className="flex gap-2">
-      <button onClick={logIds("삭제")} className="btn-primary">
+      <button className="btn-primary" onClick={() => console.log("삭제:", selectedIds)}>
         삭제하기
       </button>
-      <button onClick={logIds("연장")} className="btn-outline">
+      <button className="btn-outline" onClick={() => console.log("연장:", selectedIds)}>
         연장하기
       </button>
-      <button onClick={logIds("생성")} className="btn-secondary">
-        생성하기
-      </button>
+      <CodeCreateModal skip={skip} limit={limit} />
     </div>
   );
-};
-export default CTAButtonBox;
+}

@@ -25,6 +25,12 @@ export default function FilterAndTableContainer({
   const [filteredData, setFilteredData] = useState<Code[]>(data);
 
 
+ useEffect(() => {
+  '업데이트!'
+  setFilteredData(data);
+ }, [data]);
+
+
   const { currentData, currentPage, setCurrentPage } = usePagination({
     data: filteredData,
     itemsPerPage: pageSize,
@@ -58,6 +64,8 @@ export default function FilterAndTableContainer({
           setPageIndex(0);
         }}
         onPageChange={(p) => setPageIndex(p - 1)}
+        skip={(currentPage - 1) * pageSize}
+  limit={pageSize}
       />
     </>
   );
