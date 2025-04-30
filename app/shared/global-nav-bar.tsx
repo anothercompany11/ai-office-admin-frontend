@@ -38,17 +38,17 @@ const GlobalNavBar = ({ isCollapsed, onToggleCollapsed }: GlobalNavBarProps) => 
   const adminArray = [
     {
       label: "관리자 계정 관리",
-      icon: "link",
+      icon: "user",
       path: ADMIN_ACCOUNT_PAGE,
     },
     {
       label: "비밀번호 변경",
-      icon: "link",
+      icon: "lock",
       path: PASSWORD_RESET_PAGE,
     },
     {
       label: "로그아웃",
-      icon: "link",
+      icon: "logout",
       onClick: () => onSubmit(handleSuccessLogOut),
     },
   ];

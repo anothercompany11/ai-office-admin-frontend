@@ -16,7 +16,7 @@ const buttonVariants = cva(
         "outline-black": "border border-black disabled:border-gray-300",
       },
       size: {
-        default: "h-12 px-[15px] heading-4",
+        default: "h-12 px-[15px] text-title-m",
         sm: "h-[30px] max-w-max rounded-sm px-3 py-1 subtitle-3",
         md: "h-[37px] px-6 py-2 button-m-cta",
         lg: "h-[49px] rounded-md px-6 heading-4",

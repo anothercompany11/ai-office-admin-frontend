@@ -3,10 +3,15 @@ import { LoginPostReq } from "./dto/auth";
 
 // 로그인 요청
 export const postLogin = async (data: LoginPostReq) => {
-  return apiFetch("/auth/login", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
+  return apiFetch(
+    "/auth/login",
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+    },
+    "json",
+    true
+  );
 };
 
 // 로그아웃 요청

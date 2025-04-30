@@ -17,13 +17,13 @@ const LoginForm = () => {
   const { form, onSubmit } = useLogin(onSuccess, setError);
   return (
     <Form {...form}>
-      <form onSubmit={onSubmit} className="flex w-full max-w-[350px] flex-col gap-4">
-        <div className="flex flex-col gap-2">
-          <CustomInputField form={form} name="login_id" placeholder="ID" />
-          <CustomInputField type="password" form={form} name="password" placeholder="Password" />
-          {error && <p className="pl-[6px] text-caption text-error">{error}</p>}
+      <form onSubmit={onSubmit} className="flex w-full flex-col gap-4">
+        <div className="flex w-full flex-col gap-2">
+          <CustomInputField form={form} name="login_id" placeholder="아이디를 입력해주세요." />
+          <CustomInputField type="password" form={form} name="password" placeholder="비밀번호를 입력해주세요." />
+          {error && <p className="pl-[6px] text-caption text-status-error">{error}</p>}
         </div>
-        <Button>로그인</Button>
+        <Button type="submit">로그인</Button>
       </form>
     </Form>
   );

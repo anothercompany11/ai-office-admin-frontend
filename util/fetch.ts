@@ -83,7 +83,7 @@ const refreshAccessToken = async () => {
   } catch (error) {
     useAuthStore.getState().clearAuth();
     CSRFTokenStorage.removeToken();
-    if (typeof window !== undefined) {
+    if (typeof window !== "undefined") {
       window.location.href = LOGIN_PAGE;
     }
     throw error instanceof CustomError ? error : new CustomError(500, "토큰 재발급 중 알 수 없는 오류");
@@ -123,7 +123,6 @@ export const apiFetch = async (
     if (!isRefreshing) {
       isRefreshing = true;
       try {
-        console.log("hhhhh!!!!!!!!!!!!!!!!!!!");
         token = await refreshAccessToken();
         processQueue(null);
       } catch (err) {

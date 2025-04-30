@@ -80,7 +80,7 @@ const CustomInputField = <T extends FieldValues>({
                 disabled={disabled}
                 id={name}
                 maxLength={maxLength}
-                className={`disabled:mt-3 disabled:bg-black/10 ${!isValid && validText ? "border-destructive focus-visible:border-destructive" : ""} ${className}`}
+                className={`disabled:mt-3 w-full disabled:bg-black/10 ${!isValid && validText ? "border-status-error focus-visible:border-status-error" : ""} ${className}`}
                 {...field}
                 onChange={noSpace ? (e) => onChangeValue(e.target.value, field) : field.onChange}
                 placeholder={placeholder}
