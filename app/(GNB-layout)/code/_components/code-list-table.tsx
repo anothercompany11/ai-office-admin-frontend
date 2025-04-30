@@ -3,7 +3,13 @@ import TableSummaryText from "@/app/shared/table-summary-text";
 import { Checkbox } from "@/components/ui/checkbox";
 import Pagination from "@/components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { createColumnHelper, flexRender, getCoreRowModel, getPaginationRowModel, useReactTable } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import Link from "next/link";
 import * as React from "react";
 import CTAButtonBox from "./cta-button-box";
@@ -40,23 +46,11 @@ export function CodeListTable({
       header: ({ table }) => (
         <Checkbox
           checked={table.getIsAllPageRowsSelected()}
-          // indeterminate={table.getIsSomePageRowsSelected()}
           onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
         />
       ),
-      cell: ({ row }) => (
-        <Checkbox
-          checked={row.getIsSelected()}
-          // indeterminate={row.getIsSomeSelected()}
-          onCheckedChange={(v) => row.toggleSelected(!!v)}
-        />
-      ),
+      cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} />,
       size: 48,
-    }),
-    columnHelper.display({
-      header: "No.",
-      cell: ({ row }) =>
-        totalDataLength - (currentPage - 1) * pageSize - row.index,
     }),
     columnHelper.accessor("name", { header: "학교 이름" }),
     columnHelper.accessor("code", { header: "생성 코드" }),
@@ -89,7 +83,10 @@ export function CodeListTable({
       pagination: { pageIndex: currentPage - 1, pageSize },
     },
     onPaginationChange: (updater) => {
-      const next = typeof updater === "function" ? updater({ pageIndex: currentPage - 1, pageSize }).pageIndex : updater.pageIndex!;
+      const next =
+        typeof updater === "function"
+          ? updater({ pageIndex: currentPage - 1, pageSize }).pageIndex
+          : updater.pageIndex!;
       onPageChange(next + 1);
     },
   });
@@ -107,13 +104,13 @@ export function CodeListTable({
             onChange={(e) => setPageSize(Number(e.target.value))}
           >
             {[10, 20, 30, 40].map((n) => (
-              <option key={n} value={n}>{n}</option>
+              <option key={n} value={n}>
+                {n}
+              </option>
             ))}
           </select>
         </div>
-        <CTAButtonBox selectedIds={selectedIds} 
-        skip={skip}
-                  limit={limit}/>
+        <CTAButtonBox selectedIds={selectedIds} skip={skip} limit={limit} />
       </div>
 
       <Table>

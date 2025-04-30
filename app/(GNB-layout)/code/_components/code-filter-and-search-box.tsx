@@ -8,7 +8,7 @@ import CodeStatusRadioBox from "./code-status-radio-box";
 interface CodeFilterAndSearchBoxProps {
   data: Code[]; // 전체 데이터
   setFilteredData: (data: Code[]) => void; // 필터링 된 데이터를 업데이트하는 함수
-  setCurrentPage: (newPage: number) => void
+  setCurrentPage: (newPage: number) => void;
 }
 
 const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeFilterAndSearchBoxProps) => {
@@ -28,7 +28,6 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
   const handleDurationChange = (start?: Date, end?: Date) => {
     setDuration({ start, end });
   };
-
 
   const resetFilters = () => {
     setKeyword("");

@@ -1,5 +1,5 @@
 import { apiFetch } from "@/util/fetch";
-import { CodeCreateReq, CodeListRes } from "./dto/code";
+import { CodeCreateReq, CodeDetailRes, CodeListRes } from "./dto/code";
 
 // 코드 리스트 조회
 export const getCodeList = (params: { skip?: number; limit?: number } = {}) =>
@@ -17,3 +17,22 @@ export const generateCodes = (data: CodeCreateReq) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
+
+// 코드 삭제
+export const deleteCodes = (code_ids: string[]) =>
+  apiFetch("/codes", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code_ids }),
+  });
+
+// 코드 연장 (prompt_limit 고정 5)
+export const extendCodes = (code_ids: string[]) =>
+  apiFetch("/codes/increase-usage-limit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code_ids, prompt_limit: 5 }),
+  });
+
+// 코드 상세 조회
+export const getCodeDetail = (codeId: string) => apiFetch(`/codes/${codeId}`) as Promise<CodeDetailRes>;

@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, ChevronsLeftIcon, ChevronsRightIcon } from "
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void
+  onPageChange: (page: number) => void;
 }
 
 const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {

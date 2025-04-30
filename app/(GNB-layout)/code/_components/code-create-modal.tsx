@@ -1,4 +1,3 @@
-
 "use client";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -15,7 +14,10 @@ interface FormValues {
   autoGenerate: boolean;
   count?: number;
 }
-interface CodeCreateModalProps { skip: number; limit: number; }
+interface CodeCreateModalProps {
+  skip: number;
+  limit: number;
+}
 
 export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
   const [open, setOpen] = useState(false);
@@ -40,7 +42,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button >코드 생성</Button>
+        <Button>코드 생성</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -62,9 +64,13 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
               control={control}
               name="autoGenerate"
               render={({ field }) => (
-                <RadioGroup onValueChange={v => field.onChange(v === "true")} value={String(field.value)}>
-                  <label className="mr-4"><RadioGroupItem value="false" /> 수동(1개)</label>
-                  <label><RadioGroupItem value="true" /> 자동</label>
+                <RadioGroup onValueChange={(v) => field.onChange(v === "true")} value={String(field.value)}>
+                  <label className="mr-4">
+                    <RadioGroupItem value="false" /> 수동(1개)
+                  </label>
+                  <label>
+                    <RadioGroupItem value="true" /> 자동
+                  </label>
                 </RadioGroup>
               )}
             />

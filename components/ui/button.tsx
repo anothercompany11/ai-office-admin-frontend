@@ -1,3 +1,4 @@
+import { LoadIcon } from "@/app/shared/loading";
 import { cn } from "@/lib/utils";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -7,7 +8,7 @@ import * as React from "react";
 const buttonVariants = cva("inline-flex w-full items-center justify-center whitespace-nowrap transition-colors", {
   variants: {
     variant: {
-      fill: "bg-primary text-white hover:bg-primary-strong active:bg-primary-heavy disabled:bg-label-disabled disabled:text-label-alternative",
+      fill: "bg-primary text-white hover:bg-primary-strong active:bg-primary-heavy disabled:bg-label-natural disabled:text-label-alternative",
       outlineP:
         "border border-[#0E0E0F] bg-background hover:bg-[#F7F8FA] active:bg-label-disabled disabled:border-line disabled:bg-white disabled:text-label-disabled",
       outlineA:
@@ -17,7 +18,7 @@ const buttonVariants = cva("inline-flex w-full items-center justify-center white
       rightTextIcon: "text-primary underline-offset-4 hover:underline",
     },
     size: {
-      sm: "h-[25px] rounded-md px-3 py-1 text-title-xs",
+      sm: "rounded-md px-3 py-1 text-title-xs max-w-[90px]",
       md: "h-[37px] rounded-lg px-5 py-2 text-title-s",
       lg: "h-[48px] rounded-lg px-6 py-[13.5px] text-title-s",
       xl: "h-[52px] rounded-lg px-6 py-[14px] text-title-m",
@@ -33,12 +34,28 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
+  loading?: boolean; // 로딩 중인지 여부
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, loading, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button";
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+    return (
+      <>
+        {loading ? (
+          <Comp
+            disabled={loading}
+            className={cn(buttonVariants({ variant, size, className }), "relative")}
+            ref={ref}
+            {...props}
+          >
+            <LoadIcon type="button" />
+          </Comp>
+        ) : (
+          <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+        )}
+      </>
+    );
   }
 );
 Button.displayName = "Button";
