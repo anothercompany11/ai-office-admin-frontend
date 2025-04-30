@@ -5,7 +5,7 @@ interface TableSummaryTextProps {
 }
 const TableSummaryText = ({ currentDataLen, totalDataLen, desc }: TableSummaryTextProps) => {
   return (
-    <div className="flex gap-[6px] subtitle-1">
+    <div className="flex gap-[6px] text-subtitle-l">
       <span>{currentDataLen.toLocaleString()}건 조회</span>
       <span>{`/`}</span>
       <span>총 {totalDataLen.toLocaleString()}건</span>

@@ -1,4 +1,5 @@
 import FilterName from "@/app/shared/filter-name";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Dispatch, SetStateAction } from "react";
 
 interface CodeStatusRadioBoxProps {
@@ -6,39 +7,28 @@ interface CodeStatusRadioBoxProps {
   setChatStatus: Dispatch<SetStateAction<boolean | "all">>;
 }
 
-const CodeStatusRadioBox = ({ chatStatus, setChatStatus }: CodeStatusRadioBoxProps) => {
-  const OPTIONS = [
-    { label: "전체", value: "all" },
-    { label: "가능", value: "false" },
-    { label: "불가능", value: "true" },
-  ];
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value; // 'all' | 'true' | 'false'
-    setChatStatus(
-      val === "all" ? "all" : val === "true" // 'true' → true, 'false' → false
-    );
-  };
-
+export default function CodeStatusRadioBox({ chatStatus, setChatStatus }: CodeStatusRadioBoxProps) {
   return (
-    <div className="flex h-[72px] border-x border-b items-center">
+    <div className="flex h-[72px] border-x border-b gap-6 items-center">
       <FilterName name="채팅 상태" />
-      <div className="ml-2 flex gap-8">
-        {OPTIONS.map(({ label, value }) => (
-          <label key={value} className="flex items-center gap-1 cursor-pointer text-sm">
-            <input
-              type="radio"
-              name="chatStatus"
-              value={value}
-              checked={String(chatStatus) === value}
-              onChange={handleChange}
-              className="accent-primary"
-            />
-            {label}
-          </label>
-        ))}
-      </div>
+      <RadioGroup
+        className="flex gap-8"
+        value={String(chatStatus)}
+        onValueChange={(val) => setChatStatus(val === "all" ? "all" : val === "true")}
+      >
+        <label className="flex items-center gap-1">
+          <RadioGroupItem value="all" />
+          <span className="text-subtitle-m">전체</span>
+        </label>
+        <label className="flex items-center gap-1">
+          <RadioGroupItem value="false" />
+          <span className="text-subtitle-m">가능</span>
+        </label>
+        <label className="flex items-center gap-1">
+          <RadioGroupItem value="true" />
+          <span className="text-subtitle-m">불가능</span>
+        </label>
+      </RadioGroup>
     </div>
   );
-};
-export default CodeStatusRadioBox;
+}

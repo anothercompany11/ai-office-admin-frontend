@@ -92,6 +92,12 @@
     letter-spacing: -0.3%;
     font-weight: 600;
   }
+  .text-subtitle-m {
+    font-size: 16px;
+    line-height: 150%;
+    letter-spacing: -0.3%;
+    font-weight: 600;
+  }
   .text-subtitle-s {
     font-size: 14px;
     line-height: 150%;
@@ -255,5 +261,8 @@
   p,
   span {
     @apply whitespace-pre-line;
+  }
+  button {
+    @apply cursor-pointer
   }
 }

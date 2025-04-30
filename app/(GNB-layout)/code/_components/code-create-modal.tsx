@@ -42,11 +42,11 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>코드 생성</Button>
+        <Button>코드 생성하기</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>코드 생성</DialogTitle>
+          <DialogTitle>코드 생성하기</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>

@@ -1,4 +1,5 @@
 import { Code } from "@/app/api/dto/code";
+import { SelectBox } from "@/app/shared/select-box";
 import TableSummaryText from "@/app/shared/table-summary-text";
 import { Checkbox } from "@/components/ui/checkbox";
 import Pagination from "@/components/ui/pagination";
@@ -79,9 +80,7 @@ export function CodeListTable({
     onRowSelectionChange: setRowSelection,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    initialState: {
-      pagination: { pageIndex: currentPage - 1, pageSize },
-    },
+    initialState: { pagination: { pageIndex: currentPage - 1, pageSize } },
     onPaginationChange: (updater) => {
       const next =
         typeof updater === "function"
@@ -96,19 +95,13 @@ export function CodeListTable({
   return (
     <div className="flex flex-col gap-4 overflow-x-auto">
       <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <TableSummaryText currentDataLen={data.length} totalDataLen={totalDataLength} />
-          <select
-            className="h-8 rounded border px-2 text-sm"
-            value={pageSize}
-            onChange={(e) => setPageSize(Number(e.target.value))}
-          >
-            {[10, 20, 30, 40].map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
+          <SelectBox
+            value={String(pageSize)}
+            onChange={(val) => setPageSize(Number(val))}
+            options={[10, 20, 30, 40].map((n) => ({ label: `${n}개씩 보기`, value: String(n) }))}
+          />
         </div>
         <CTAButtonBox selectedIds={selectedIds} skip={skip} limit={limit} />
       </div>
@@ -132,9 +125,7 @@ export function CodeListTable({
                 {row.getVisibleCells().map((cell, ci) => (
                   <TableCell
                     key={cell.id}
-                    className={`${ci === 0 ? "border-x border-t" : "border-r border-t"} ${
-                      ri === table.getRowModel().rows.length - 1 ? "border-b" : ""
-                    }`}
+                    className={`${ci === 0 ? "border-x border-t" : "border-r border-t"} ${ri === table.getRowModel().rows.length - 1 ? "border-b" : ""}`}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>

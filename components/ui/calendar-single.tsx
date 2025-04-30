@@ -45,7 +45,7 @@ const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
       <PopoverTrigger asChild>
         <button
           className={cn(
-            "w-[250px] rounded-sm border relative h-[30px] text-[15px] px-3 items-center justify-between text-left"
+            "w-[250px] p-3 rounded-sm border relative text-[15px] max-h-12 items-center justify-between text-left"
           )}
         >
           <span className="flex gap-3 subtitle-3">

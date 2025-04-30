@@ -25,7 +25,6 @@ export default function FilterAndTableContainer({
   const [filteredData, setFilteredData] = useState<Code[]>(data);
 
   useEffect(() => {
-    "업데이트!";
     setFilteredData(data);
   }, [data]);
 

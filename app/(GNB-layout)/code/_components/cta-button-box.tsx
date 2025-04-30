@@ -23,10 +23,10 @@ const CTAButtonBox = ({ selectedIds, skip, limit }: CTAButtonBoxProps) => {
   const isEmpty = selectedIds.length === 0;
   return (
     <div className="flex gap-2">
-      <Button disabled={isEmpty} onClick={() => setShowDelModal(true)}>
+      <Button variant={"outline-black"} disabled={isEmpty} onClick={() => setShowDelModal(true)}>
         삭제하기
       </Button>
-      <Button disabled={isEmpty} onClick={() => setShowExtModal(true)}>
+      <Button variant={"outline-black"} disabled={isEmpty} onClick={() => setShowExtModal(true)}>
         연장하기
       </Button>
 

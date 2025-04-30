@@ -18,13 +18,13 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
 
-  /* 1) 기본값을 어제·오늘로 세팅 */
+  // 기본값을 어제·오늘로 세팅
   const [duration, setDuration] = useState<searchDate>({
     start: yesterday,
     end: today,
   });
 
-  /** 기간 변경 콜백 */
+  // 기간 변경 핸들러
   const handleDurationChange = (start?: Date, end?: Date) => {
     setDuration({ start, end });
   };
@@ -44,7 +44,7 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
     setCurrentPage(1); // 페이지 초기화
     let filtered = data;
 
-    /* 1) 검색어 */
+    /* 검색어 */
     if (keyword) {
       const lower = keyword.toLowerCase();
       filtered = filtered.filter(
@@ -52,7 +52,7 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
       );
     }
     console.log("1", filtered);
-    /* 2) 기간 */
+    /* 기간 */
     if (duration && duration.start && duration.end) {
       // duration.start/end 는 사용자가 고른 날짜의 00:00:00 이라 가정
       const start = new Date(duration.start);

@@ -29,7 +29,7 @@ const DurationBox = ({ range, noBottomBorder, handleFilterChange }: DurationBoxP
   return (
     <div className={`flex h-[72px] ${noBottomBorder ? "border-x" : "border-x border-b"}`}>
       <FilterName name="기간검색" />
-      <div className="ml-2 flex shrink-0 items-center gap-2">
+      <div className="pl-6 flex items-center">
         <CalendarSingle date={date} setDate={handleDateChange} />
       </div>
     </div>
