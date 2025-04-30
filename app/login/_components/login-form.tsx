@@ -1,5 +1,5 @@
 import CustomInputField from "@/app/shared/custom-input-field";
-import { CtaButton } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { CODE_PAGE } from "@/constants/path";
 import { useLogin } from "@/hooks/use-auth";
@@ -23,7 +23,7 @@ const LoginForm = () => {
           <CustomInputField type="password" form={form} name="password" placeholder="Password" />
           {error && <p className="pl-[6px] text-caption text-error">{error}</p>}
         </div>
-        <CtaButton>로그인</CtaButton>
+        <Button>로그인</Button>
       </form>
     </Form>
   );

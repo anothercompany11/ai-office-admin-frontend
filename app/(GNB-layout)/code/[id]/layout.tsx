@@ -14,9 +14,7 @@ const CodeDetailPageLayout = ({ children }: CodeDetailPageLayoutProps) => {
         <div className="relative min-h-screen">
           <PageCrumble props={{ icon: "link", type: "original", path: "코드 관리" }} />
           <p className="text-body-m text-label-natural">{`코드 관리 > 상세보기`}</p>
-          <Loading>
-          {children}
-          </Loading>
+          <Loading>{children}</Loading>
         </div>
       </div>
 
