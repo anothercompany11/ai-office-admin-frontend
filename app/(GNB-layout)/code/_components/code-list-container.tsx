@@ -12,13 +12,15 @@ export default function CodeListContainer() {
   if (!res?.data) return null;
 
   return (
-    <FilterAndTableContainer
-      data={res.data}
-      pageIndex={pageIndex}
-      setPageIndex={setPageIndex}
-      pageSize={pageSize}
-      setPageSize={setPageSize}
-      totalPages={res.meta?.total_pages || 0}
-    />
+    <div className="overflow-x-auto">
+      <FilterAndTableContainer
+        data={res.data}
+        pageIndex={pageIndex}
+        setPageIndex={setPageIndex}
+        pageSize={pageSize}
+        setPageSize={setPageSize}
+        totalPages={res.meta?.total_pages || 0}
+      />
+    </div>
   );
 }

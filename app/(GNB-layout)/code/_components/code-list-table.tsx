@@ -4,6 +4,8 @@ import TableSummaryText from "@/app/shared/table-summary-text";
 import { Checkbox } from "@/components/ui/checkbox";
 import Pagination from "@/components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
+import formattedDate from "@/util/date";
 import {
   createColumnHelper,
   flexRender,
@@ -56,20 +58,38 @@ export function CodeListTable({
     columnHelper.accessor("name", { header: "학교 이름" }),
     columnHelper.accessor("code", { header: "생성 코드" }),
     columnHelper.display({
+      header: "생성 일자",
+      cell: ({ row }) => `${formattedDate(row.original.created_at)}`,
+    }),
+    columnHelper.display({
       header: "이용 가능 횟수",
       cell: ({ row }) => `${row.original.prompt_count} / ${row.original.prompt_limit}`,
     }),
     columnHelper.display({
       header: "채팅 상태",
-      cell: ({ row }) => (row.original.is_limit_reached ? "불가능" : "가능"),
+      cell: ({ row }) => {
+        const { is_limit_reached } = row.original;
+        return (
+          <p className={is_limit_reached ? "text-status-error" : ""}>
+            {row.original.is_limit_reached ? "불가능" : "가능"}
+          </p>
+        );
+      },
     }),
     columnHelper.display({
-      header: "관리자 메모",
+      id: "memo",
+      header: () => <div className="w-[100px]">관리자 메모</div>,
       cell: ({ row }) => (
-        <Link href={`/code/${row.original.id}`} className="text-primary underline">
-          상세보기
-        </Link>
+        <div className="w-[100px]">
+          <Link
+            href={`/code/${row.original.id}`}
+            className="border text-label-strong border-line-strong text-title-xs rounded-[6px] py-1 px-[17px]"
+          >
+            상세보기
+          </Link>
+        </div>
       ),
+      size: 100,
     }),
   ];
 
@@ -93,7 +113,7 @@ export function CodeListTable({
   const selectedIds = table.getSelectedRowModel().rows.map((r) => r.original.id);
 
   return (
-    <div className="flex flex-col gap-4 overflow-x-auto">
+    <div className="flex flex-col min-w-[900px] gap-4 overflow-x-auto">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
           <TableSummaryText currentDataLen={data.length} totalDataLen={totalDataLength} />
@@ -106,12 +126,15 @@ export function CodeListTable({
         <CTAButtonBox selectedIds={selectedIds} skip={skip} limit={limit} />
       </div>
 
-      <Table>
+      <Table className="">
         <TableHeader>
           {table.getHeaderGroups().map((hg) => (
             <TableRow key={hg.id}>
               {hg.headers.map((h, i) => (
-                <TableHead key={h.id} className={i === 0 ? "border-x" : "border-r"}>
+                <TableHead
+                  key={h.id}
+                  className={cn(i === 0 ? "border-x" : "border-r", h.column.id === "memo" ? "w-[100px]" : "")}
+                >
                   {h.isPlaceholder ? null : flexRender(h.column.columnDef.header, h.getContext())}
                 </TableHead>
               ))}

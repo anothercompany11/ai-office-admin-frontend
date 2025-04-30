@@ -40,7 +40,7 @@ export default function FilterAndTableContainer({
   }, [pageIndex, setCurrentPage]);
 
   return (
-    <>
+    <div className="flex flex-col gap-10">
       <CodeFilterAndSearchBox
         data={data}
         setFilteredData={(d) => {
@@ -63,6 +63,6 @@ export default function FilterAndTableContainer({
         skip={(currentPage - 1) * pageSize}
         limit={pageSize}
       />
-    </>
+    </div>
   );
 }

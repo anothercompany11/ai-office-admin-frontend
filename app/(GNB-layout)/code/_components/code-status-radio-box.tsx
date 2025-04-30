@@ -16,15 +16,15 @@ export default function CodeStatusRadioBox({ chatStatus, setChatStatus }: CodeSt
         value={String(chatStatus)}
         onValueChange={(val) => setChatStatus(val === "all" ? "all" : val === "true")}
       >
-        <label className="flex items-center gap-1">
+        <label className="flex items-center gap-1 cursor-pointer">
           <RadioGroupItem value="all" />
           <span className="text-subtitle-m">전체</span>
         </label>
-        <label className="flex items-center gap-1">
+        <label className="flex items-center gap-1 cursor-pointer">
           <RadioGroupItem value="false" />
           <span className="text-subtitle-m">가능</span>
         </label>
-        <label className="flex items-center gap-1">
+        <label className="flex items-center gap-1 cursor-pointer">
           <RadioGroupItem value="true" />
           <span className="text-subtitle-m">불가능</span>
         </label>

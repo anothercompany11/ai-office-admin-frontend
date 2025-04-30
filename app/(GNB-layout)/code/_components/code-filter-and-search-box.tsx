@@ -82,7 +82,7 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
   }, [keyword, duration, chatStatus]);
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-[900px]">
       <SearchBar placeholder="코드,학교 이름,관리자 메모 검색" setKeyword={setKeyword} onReset={resetFilters} />
       <DurationBox range={duration} handleFilterChange={handleDurationChange} />
       <CodeStatusRadioBox chatStatus={chatStatus} setChatStatus={setChatStatus} />
