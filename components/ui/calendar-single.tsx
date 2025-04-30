@@ -52,7 +52,7 @@ const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
             <input
               type="text"
               readOnly
-              value={range && range.from ? formattedDate(range.from, "INPUT_DATE") : "연도. 월. 일"}
+              value={range && range.from ? formattedDate(range.from) : "연도. 월. 일"}
               placeholder="Start date"
               className="max-w-[80px] bg-transparent focus:outline-none"
             />
@@ -60,7 +60,7 @@ const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
             <input
               type="text"
               readOnly
-              value={range && range.to ? formattedDate(range.to, "INPUT_DATE") : "연도. 월. 일"}
+              value={range && range.to ? formattedDate(range.to) : "연도. 월. 일"}
               placeholder="End date"
               className="max-w-[80px] bg-transparent focus:outline-none"
             />

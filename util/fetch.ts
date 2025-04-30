@@ -60,7 +60,7 @@ const refreshAccessToken = async () => {
     const csrfToken = CSRFTokenStorage.getToken();
     if (!csrfToken) throw new CustomError(401, "CSRF 토큰이 없습니다.");
 
-    const response = await fetch(`${BASE_URL}/api/admin/auth/refresh-token`, {
+    const response = await fetch(`${BASE_URL}/auth/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ csrf_token: csrfToken }),
@@ -83,7 +83,9 @@ const refreshAccessToken = async () => {
   } catch (error) {
     useAuthStore.getState().clearAuth();
     CSRFTokenStorage.removeToken();
-    window.location.href = LOGIN_PAGE;
+    if (typeof window !== undefined) {
+      window.location.href = LOGIN_PAGE;
+    }
     throw error instanceof CustomError ? error : new CustomError(500, "토큰 재발급 중 알 수 없는 오류");
   }
 };
@@ -121,6 +123,7 @@ export const apiFetch = async (
     if (!isRefreshing) {
       isRefreshing = true;
       try {
+        console.log("hhhhh!!!!!!!!!!!!!!!!!!!");
         token = await refreshAccessToken();
         processQueue(null);
       } catch (err) {
@@ -152,8 +155,44 @@ export const apiFetch = async (
 
   const contentType = response.headers.get("Content-Type");
   if (contentType?.includes("application/json")) {
-    return response.json();
+    const json = await response.json();
+    return json;
   }
 
   return null;
 };
+
+// export async function apiFetch(input: string, init: RequestInit = {}): Promise<unknown> {
+//   const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
+//   const doFetch = async (token?: string | null) => {
+//     const res = await fetch(`${BASE_URL}${input}`, {
+//       credentials: "include",
+//       ...init,
+//       headers: {
+//         "Content-Type": "application/json",
+//         ...(token ? { Authorization: `Bearer ${token}` } : {}),
+//         ...(init.headers || {}),
+//       },
+//     });
+
+//     // 204(본문 없음) → 바로 null 반환
+//     if (res.status === 204) return null;
+
+//     // 정상 JSON 파싱
+//     const data = res.headers.get("Content-Type")?.includes("application/json") ? await res.json() : await res.text();
+
+//     if (res.ok) return data;
+
+//     // 401 → 토큰 재발급 후 1회 재시도
+//     if (res.status === 401) {
+//       const newToken = await ensureFreshToken();
+//       if (!newToken) throw new Error("unauthorized");
+//       return doFetch(newToken); // 재귀 한 번
+//     }
+
+//     // 기타 오류
+//     throw new Error(typeof data === "string" ? data : "API error " + res.status);
+//   };
+
+//   return doFetch(getAccessToken());
+// }

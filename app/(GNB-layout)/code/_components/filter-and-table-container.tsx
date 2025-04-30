@@ -1,58 +1,64 @@
-import { LoadIcon } from "@/app/shared/loading";
+"use client";
+import { Code } from "@/app/api/dto/code";
 import { usePagination } from "@/hooks/use-pagination";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import MemberFilterAndSearchBox from "./member-filter-and-search-box";
-import { MemberTable } from "./member-table";
+import CodeFilterAndSearchBox from "./code-filter-and-search-box";
+import { CodeListTable } from "./code-list-table";
 
-export interface MemberRes {
-  id: string; // 회원 id
-  userNo: string; // 회원 No
-  userType: string; // 회원 유형 [작가 | 일반 회원]
-  createdAt: string; // 가입일
-  nickname: string; // 닉네임
-  email: string;
+interface Props {
+  data: Code[];
+  pageIndex: number;
+  setPageIndex: (idx: number) => void;
+  pageSize: number;
+  setPageSize: (n: number) => void;
+  totalPages: number;
 }
 
-interface FilterAndTableContainerProps {
-  data: MemberRes[];
-}
+export default function FilterAndTableContainer({
+  data,
+  pageIndex,
+  setPageIndex,
+  pageSize,
+  setPageSize,
+  totalPages,
+}: Props) {
+  const [filteredData, setFilteredData] = useState<Code[]>(data);
 
-const FilterAndTableContainer = ({ data }: FilterAndTableContainerProps) => {
-  const [filteredData, setFilteredData] = useState(data);
-  const { currentData, currentPage, setCurrentPage, totalPages } = usePagination({
+
+  const { currentData, currentPage, setCurrentPage } = usePagination({
     data: filteredData,
-    itemsPerPage: 10,
+    itemsPerPage: pageSize,
+    pageIndex: pageIndex + 1,
+    onPageChange: (p) => setPageIndex(p - 1),
   });
-  const prev = useSearchParams().get("prev");
-  const [isLoading, setLoading] = useState(true); // 기간 필터링이 적용되었는지에 따라 변경되는 로딩 상태
+
 
   useEffect(() => {
-    if (prev) {
-      setCurrentPage(Number(prev));
-    }
-  }, [prev, setCurrentPage]);
+    setCurrentPage(pageIndex + 1);
+  }, [pageIndex, setCurrentPage]);
 
   return (
     <>
-      <MemberFilterAndSearchBox
+      <CodeFilterAndSearchBox
         data={data}
-        setFilteredData={setFilteredData}
-        setLoading={setLoading}
-        setCurrentPage={setCurrentPage}
+        setFilteredData={(d) => {
+          setFilteredData(d);
+          setPageIndex(0);
+        }}
+        setCurrentPage={(p) => setPageIndex(p - 1)}
       />
-      {isLoading ? (
-        <LoadIcon />
-      ) : (
-        <MemberTable
-          data={currentData}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-          totalDataLength={filteredData.length}
-        />
-      )}
+      <CodeListTable
+        data={currentData}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalDataLength={filteredData.length}
+        pageSize={pageSize}
+        setPageSize={(n) => {
+          setPageSize(n);
+          setPageIndex(0);
+        }}
+        onPageChange={(p) => setPageIndex(p - 1)}
+      />
     </>
   );
-};
-export default FilterAndTableContainer;
+}

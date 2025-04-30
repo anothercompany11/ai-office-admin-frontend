@@ -1,6 +1,7 @@
 import CustomInputField from "@/app/shared/custom-input-field";
 import { CtaButton } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { CODE_PAGE } from "@/constants/path";
 import { useLogin } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -11,7 +12,7 @@ const LoginForm = () => {
 
   // 로그인 성공 콜백 핸들러
   const onSuccess = () => {
-    router.replace("/member");
+    router.replace(CODE_PAGE);
   };
   const { form, onSubmit } = useLogin(onSuccess, setError);
   return (

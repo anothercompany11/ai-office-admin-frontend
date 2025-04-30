@@ -1,17 +1,17 @@
 "use client";
-
 import Loading from "@/app/shared/loading";
 import PageCrumble from "@/app/shared/page-crumble";
-import MemberContainer from "./_components/member-container";
+import CodeListContainer from "./_components/code-list-container";
 
-const MemberPage = () => {
+const CodeListPage = () => {
   return (
     <div className="flex flex-col gap-10 p-10">
       <PageCrumble props={{ icon: "link", type: "original", path: "코드 관리" }} />
       <Loading>
-        <MemberContainer />
+        <CodeListContainer />
       </Loading>
     </div>
   );
 };
-export default MemberPage;
+
+export default CodeListPage;

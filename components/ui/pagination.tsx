@@ -1,10 +1,9 @@
 import { ChevronLeft, ChevronRight, ChevronsLeftIcon, ChevronsRightIcon } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: Dispatch<SetStateAction<number>>;
+  onPageChange: (page: number) => void
 }
 
 const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) => {

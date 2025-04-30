@@ -1,17 +1,17 @@
+enum DateType {
+  DEFAULT_FULL, // 2024.01.01
+  DEFAULT_MONTH_DATE, // 01.01
+  TEXT_FULL, // 2024년 01월 01일
+  TEXT_MONTH_DATE, // 01월 01일
+  SHORTENED_YEAR_DEFAULT_FULL, // 24.01.01
+  SHORTENED_YEAR_TEXT_FULL, // 24년 01월 01일
+  MONTH_DATE, // 24.01
+  MONTH_DATE_TEXT, // 24년 01월
+  INPUT_DATE, // 2024-01-01
+}
+
 // 날짜 변환 함수
-const formattedDate = (
-  utcValue: number | null | string | undefined | Date,
-  type?:
-    | "DEFAULT_FULL" // 2024.01.01
-    | "DEFAULT_MONTH_DATE" // 01.01
-    | "TEXT_FULL" // 2024년 01월 01일
-    | "TEXT_MONTH_DATE" // 01월 01일
-    | "SHORTENED_YEAR_DEFAULT_FULL" // 24.01.01
-    | "SHORTENED_YEAR_TEXT_FULL" // 24년 01월 01일
-    | "MONTH_DATE" // 24.01
-    | "MONTH_DATE_TEXT" // 24년 01월
-    | "INPUT_DATE" // 2024-01-01
-) => {
+const formattedDate = (utcValue: number | null | string | undefined | Date, type: DateType = DateType.DEFAULT_FULL) => {
   if (!utcValue) return "-";
 
   const date = new Date(utcValue);
@@ -23,39 +23,39 @@ const formattedDate = (
   const minutes = date.getMinutes().toString().padStart(2, "0");
   const seconds = date.getSeconds().toString().padStart(2, "0");
 
-  if (type === "DEFAULT_FULL") {
+  if (type === DateType.DEFAULT_FULL) {
     return `${year}.${month}.${day}`;
   }
 
-  if (type === "DEFAULT_MONTH_DATE") {
+  if (type === DateType.DEFAULT_MONTH_DATE) {
     return `${month}.${day}`;
   }
 
-  if (type === "TEXT_FULL") {
+  if (type === DateType.TEXT_FULL) {
     return `${year}년 ${month}월 ${day}일`;
   }
 
-  if (type === "TEXT_MONTH_DATE") {
+  if (type === DateType.TEXT_MONTH_DATE) {
     return `${month}월 ${day}일`;
   }
 
-  if (type === "SHORTENED_YEAR_DEFAULT_FULL") {
+  if (type === DateType.SHORTENED_YEAR_DEFAULT_FULL) {
     return `${shortenedYear}.${month}.${day}`;
   }
 
-  if (type === "SHORTENED_YEAR_TEXT_FULL") {
+  if (type === DateType.SHORTENED_YEAR_TEXT_FULL) {
     return `${shortenedYear}년 ${month}월 ${day}일`;
   }
 
-  if (type === "MONTH_DATE") {
+  if (type === DateType.MONTH_DATE) {
     return `${shortenedYear}.${month}`;
   }
 
-  if (type === "MONTH_DATE_TEXT") {
+  if (type === DateType.MONTH_DATE_TEXT) {
     return `${shortenedYear}년 ${month}월`;
   }
 
-  if (type === "INPUT_DATE") {
+  if (type === DateType.INPUT_DATE) {
     return `${year}-${month}-${day}`;
   }
 

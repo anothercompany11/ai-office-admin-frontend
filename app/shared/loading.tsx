@@ -1,3 +1,4 @@
+"use client";
 import { AlertCircleIcon, LoaderIcon } from "lucide-react";
 import { ReactNode, Suspense } from "react";
 import ErrorBoundary from "./error-boundary";
