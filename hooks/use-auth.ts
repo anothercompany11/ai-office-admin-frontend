@@ -1,4 +1,4 @@
-import { postLogin, postRefreshToken } from "@/app/api/auth";
+import { postLogin, postLogout, postRefreshToken } from "@/app/api/auth";
 import { LOGIN_PAGE } from "@/constants/path";
 import { loginSchema } from "@/schema/auth";
 import { useAuthStore } from "@/stores/auth-store";
@@ -44,6 +44,28 @@ export const useLogin = (onSuccess: () => void, onFail: (val: string) => void) =
   });
 
   return { form, onSubmit, loading };
+};
+
+// 로그아웃 훅
+export const usePostLogout = () => {
+  const onSubmit = async (onSuccess: () => void) => {
+    try {
+      // 0.4초 대기
+      await new Promise((resolve) => setTimeout(resolve, 400));
+
+      await postLogout();
+      // toast({ title: `로그아웃 되었어요` });
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      onSuccess();
+    } catch (err: unknown) {
+      if (!err) return;
+      // toast({ title: `잠시 후 다시 시도해주세요` });
+    } finally {
+      // localStorage.removeItem("user");
+    }
+  };
+
+  return { onSubmit };
 };
 
 // 토큰 리프레시 훅
