@@ -3,6 +3,7 @@
 import { changePassword } from "@/app/api/admin";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 interface ChangePasswordForm {
   password: string;
@@ -36,7 +37,9 @@ export function usePostChangePassword(onSuccess: () => void) {
       onSuccess();
     } catch (e: unknown) {
       console.error(e);
-      setError("비밀번호 변경에 실패했습니다.");
+      toast("비밀번호 재설정 실패", {
+        description: "잠시 후 다시 시도해주세요",
+      });
     } finally {
       setIsSubmitting(false);
     }
