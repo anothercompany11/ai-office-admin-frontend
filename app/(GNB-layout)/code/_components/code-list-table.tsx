@@ -57,7 +57,7 @@ export function CodeListTable({
     }),
     columnHelper.accessor("name", {
       header: "학교 이름",
-      cell: info => {
+      cell: (info) => {
         const name = info.getValue<string>();
         return name && name.trim() !== "" ? name : "-";
       },

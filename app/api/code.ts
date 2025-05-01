@@ -38,10 +38,7 @@ export const extendCodes = (code_ids: string[]) =>
 export const getCodeDetail = (codeId: string) => apiFetch(`/codes/${codeId}`) as Promise<CodeDetailRes>;
 
 // 코드 수정
-export const updateCode = (
-  code_id: string,
-  data: CodeUpdateReq
-) =>
+export const updateCode = (code_id: string, data: CodeUpdateReq) =>
   apiFetch(`/codes/${code_id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

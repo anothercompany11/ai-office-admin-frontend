@@ -10,9 +10,7 @@ import React from "react";
 export default function AdminUserTable() {
   const [page, setPage] = React.useState(1);
   const [size, setSize] = React.useState(10);
-  const { data, meta, isLoading, refresh } = useGetAdminAccountList(page, size);
-
-  if (isLoading) return <p>로딩 중...</p>;
+  const { data, meta } = useGetAdminAccountList(page, size);
 
   const totalPages = meta?.total_pages ?? 0;
   const totalItems = meta?.total ?? 0;

@@ -96,7 +96,7 @@ export interface CodeDetailRes {
   code: string;
   message: string;
   data: CodeDetail | null;
-  meta: Record<string, any>;
+  meta: Record<string, unknown>;
   errors: ResponseError[] | null;
 }
 
