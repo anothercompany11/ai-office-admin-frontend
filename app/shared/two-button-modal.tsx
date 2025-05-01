@@ -33,7 +33,7 @@ const TwoButtonModal = ({
     <div className="fixed inset-0 z-10 flex items-center justify-center overflow-hidden bg-black/70">
       <div className="w-[319px] rounded-[20px] bg-white pt-8 px-4 pb-4">
         <div className="flex flex-col gap-6">
-          <div className="flex items-center justify-center flex-col gap-2">
+          <div className="flex items-center text-center justify-center flex-col gap-2">
             <p className="text-title-l text-label-strong">{title}</p>
             {desc && <p className="text-subtitle-s text-label-natural">{desc}</p>}
           </div>

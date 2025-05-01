@@ -99,3 +99,10 @@ export interface CodeDetailRes {
   meta: Record<string, any>;
   errors: ResponseError[] | null;
 }
+
+// 코드 수정 요청
+export interface CodeUpdateReq {
+  name: string;
+  description: string;
+  prompt_limit: number;
+}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn, formatLatex } from "@/lib/utils";
 import { Check, Copy } from "lucide-react";
 import React, { useState } from "react";
@@ -61,28 +62,28 @@ const CopyButton = ({ code }: { code: string }) => {
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, isMob }) => {
   const components: Components = {
-    h1: ({ node, ...props }: any) => <h1 className="text-2xl font-bold mt-6 mb-4" {...props} />,
-    h2: ({ node, ...props }: any) => <h2 className="text-xl font-bold mt-5 mb-3" {...props} />,
-    h3: ({ node, ...props }: any) => <h3 className="text-lg font-bold mt-4 mb-2" {...props} />,
-    h4: ({ node, ...props }: any) => <h4 className="font-bold mt-3 mb-2" {...props} />,
-    p: ({ node, ...props }: any) => (
+    h1: ({ ...props }: any) => <h1 className="text-2xl font-bold mt-6 mb-4" {...props} />,
+    h2: ({ ...props }: any) => <h2 className="text-xl font-bold mt-5 mb-3" {...props} />,
+    h3: ({ ...props }: any) => <h3 className="text-lg font-bold mt-4 mb-2" {...props} />,
+    h4: ({ ...props }: any) => <h4 className="font-bold mt-3 mb-2" {...props} />,
+    p: ({ ...props }: any) => (
       <p
-        className={cn(`my-2 text-body-s web:text-body-m leading-relaxed`, isMob ? "text-body-s" : "text-body-m")}
+        className={cn(`text-body-s web:text-body-m leading-relaxed`, isMob ? "text-body-s" : "text-body-m")}
         {...props}
       />
     ),
-    ul: ({ node, ...props }: any) => <ul className="list-disc ml-6 my-2" {...props} />,
-    ol: ({ node, ...props }: any) => <ol className="list-decimal ml-6 my-2" {...props} />,
-    li: ({ node, ...props }: any) => (
+    ul: ({ ...props }: any) => <ul className="list-disc ml-6 my-2" {...props} />,
+    ol: ({ ...props }: any) => <ol className="list-decimal ml-6 my-2" {...props} />,
+    li: ({ ...props }: any) => (
       <li className={cn(`my-1 text-body-s web:text-body-m`, isMob ? "text-body-s" : "text-body-m")} {...props} />
     ),
-    blockquote: ({ node, ...props }: any) => (
+    blockquote: ({ ...props }: any) => (
       <blockquote className="border-l-4 border-gray-300 pl-4 italic my-3" {...props} />
     ),
     // 코드 블록 구문 강조 및 복사 버튼 처리
-    code: ({ node, inline, className, children, ...props }: CodeComponentProps) => {
-      const match = /language-(\w+)/.exec(className || "");
-      const language = match && match[1] ? match[1] : "";
+    code: ({ inline, children, ...props }: CodeComponentProps) => {
+      // const match = /language-(\w+)/.exec(className || "");
+      // const language = match && match[1] ? match[1] : "";
       const content = String(children).replace(/\n$/, "");
 
       // 인라인 코드 처리 - ChatGPT 스타일로 개선
@@ -116,7 +117,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, isMob }) =
       return null;
     },
     // 코드 블록을 위한 별도 컴포넌트 - pre 태그 안에서 처리하여 p 태그 내부에 div가 들어가는 문제 방지
-    pre: ({ children, className, ...props }: any) => {
+    pre: ({ children }: any) => {
       // pre 태그의 자식 요소에서 code 태그와 언어 정보 추출
       let language = "";
       let content = "";
@@ -170,24 +171,24 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, isMob }) =
         </div>
       );
     },
-    a: ({ node, ...props }: any) => (
+    a: ({ ...props }: any) => (
       <a className="text-blue-400 hover:underline" target="_blank" rel="noopener noreferrer" {...props} />
     ),
-    table: ({ node, ...props }: any) => (
+    table: ({ ...props }: any) => (
       <div className="pointer-events-none relative left-[50%] flex w-[100cqw] translate-x-[-50%] justify-center *:pointer-events-auto">
         <div className="tableContainer">
           <table className="min-w-full" {...props} />
         </div>
       </div>
     ),
-    thead: ({ node, ...props }: any) => <thead {...props} />,
-    tbody: ({ node, ...props }: any) => <tbody {...props} />,
-    tr: ({ node, ...props }: any) => <tr {...props} />,
-    th: ({ node, ...props }: any) => <th className="px-4 py-2 text-left font-medium" {...props} />,
-    td: ({ node, ...props }: any) => <td className="px-4 py-2" {...props} />,
-    strong: ({ node, ...props }: any) => <strong className="font-bold" {...props} />,
-    em: ({ node, ...props }: any) => <em className="italic" {...props} />,
-    hr: ({ node, ...props }: any) => <hr className="my-4 border-gray-700" style={{}} {...props} />,
+    thead: ({ ...props }: any) => <thead {...props} />,
+    tbody: ({ ...props }: any) => <tbody {...props} />,
+    tr: ({ ...props }: any) => <tr {...props} />,
+    th: ({ ...props }: any) => <th className="px-4 py-2 text-left font-medium" {...props} />,
+    td: ({ ...props }: any) => <td className="px-4 py-2" {...props} />,
+    strong: ({ ...props }: any) => <strong className="font-bold" {...props} />,
+    em: ({ ...props }: any) => <em className="italic" {...props} />,
+    hr: ({ ...props }: any) => <hr className="my-4 border-gray-700" style={{}} {...props} />,
   };
 
   return (

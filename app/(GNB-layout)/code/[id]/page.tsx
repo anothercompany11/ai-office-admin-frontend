@@ -8,10 +8,8 @@ const CodeDetailPage = () => {
   const params = useParams();
   const codeId = Array.isArray(params.id) ? params.id[0] : params.id;
 
-  const { detail, isLoading, error, refresh } = useGetCodeDetail(codeId);
+  const { detail } = useGetCodeDetail(codeId);
 
-  if (isLoading) return <p>로딩 중…</p>;
-  if (error) return <p>에러: {error.message}</p>;
   if (!detail) return <p>데이터가 없습니다.</p>;
 
   return (

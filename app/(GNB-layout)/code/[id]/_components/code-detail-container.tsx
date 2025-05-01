@@ -1,11 +1,19 @@
+"use client";
+
+import TwoButtonModal from "@/app/shared/two-button-modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CODE_PAGE } from "@/constants/path";
+import useUpdateCode from "@/hooks/use-code-update";
+import useDeleteCodes from "@/hooks/use-delete-code";
 import formattedDate from "@/util/date";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface CodeDetailContainerProps {
   name: string;
   code: string;
+  id: string;
   created_at: string;
   prompt_count: number;
   prompt_limit: number;
@@ -21,22 +29,43 @@ export default function CodeDetailContainer({
   prompt_limit,
   is_limit_reached,
   description,
+  id,
 }: CodeDetailContainerProps) {
+  const router = useRouter();
+  const onSuccessDelete = () => router.replace(CODE_PAGE);
+  const { remove, isDeleting } = useDeleteCodes(0, 0, onSuccessDelete);
+  const onSuccessUpdate = () => setIsEditing(false);
+  const { update, isUpdating } = useUpdateCode(onSuccessUpdate);
+
+  // 편집 상태
   const [isEditing, setIsEditing] = useState(false);
   const [memo, setMemo] = useState(description);
 
-  const handleCancel = () => {
+  // 삭제 모달 상태
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCancelEdit = () => {
     setMemo(description);
     setIsEditing(false);
   };
 
-  const handleSave = () => {
-    // TODO: 저장 핸들러
-    setIsEditing(false);
+  const handleSave = async () => {
+    await update(id, {
+      name,
+      description: memo,
+      prompt_limit: prompt_limit,
+    });
   };
 
-  const handleDelete = () => {
-    // TODO: 삭제 핸들러
+  const openDeleteModal = () => {
+    setIsModalOpen(true);
+  };
+  const closeDeleteModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    await remove([id]);
   };
 
   return (
@@ -45,22 +74,24 @@ export default function CodeDetailContainer({
       <div className="flex overflow-hidden">
         <h2 className="text-title-l mr-auto">상세정보</h2>
         <div className="flex gap-2 max-w-max">
-          <Button size={"md"} variant={"destructive"} onClick={handleDelete}>
-            삭제하기
-          </Button>
           {isEditing ? (
             <>
-              <Button size={"md"} variant={"outline"} onClick={handleCancel}>
+              <Button size="md" variant="outline" onClick={handleCancelEdit}>
                 취소하기
               </Button>
-              <Button size={"md"} variant={"outline"} onClick={handleSave}>
+              <Button disabled={isUpdating} size="md" variant="outline" onClick={handleSave}>
                 저장하기
               </Button>
             </>
           ) : (
-            <Button variant={"outline"} size={"md"} onClick={() => setIsEditing(true)}>
-              수정하기
-            </Button>
+            <>
+              <Button size="md" variant="destructive" onClick={openDeleteModal}>
+                삭제하기
+              </Button>
+              <Button variant="outline" size="md" onClick={() => setIsEditing(true)}>
+                수정하기
+              </Button>
+            </>
           )}
         </div>
       </div>
@@ -92,12 +123,24 @@ export default function CodeDetailContainer({
         <div className="flex gap-3">
           <p className="text-subtitle-m w-[120px]">관리자 메모</p>
           {isEditing ? (
-            <Input className=" w-full" value={memo} onChange={(e) => setMemo(e.target.value)} />
+            <Input className="w-full" value={memo} onChange={(e) => setMemo(e.target.value)} />
           ) : (
             <p className="text-body-2 text-gray-800">{memo}</p>
           )}
         </div>
       </div>
+
+      {/* 삭제 확인 모달 */}
+      {isModalOpen && (
+        <TwoButtonModal
+          title="코드를 삭제하시나요?"
+          desc={`코드 삭제 시 해당 사용자의 채팅 내역이\n영구적으로 삭제됩니다.`}
+          loading={isDeleting}
+          buttonText="삭제"
+          onClickFirstBtn={closeDeleteModal}
+          onClickSecondBtn={handleConfirmDelete}
+        />
+      )}
     </div>
   );
 }

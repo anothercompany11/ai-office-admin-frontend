@@ -55,7 +55,13 @@ export function CodeListTable({
       cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} />,
       size: 48,
     }),
-    columnHelper.accessor("name", { header: "학교 이름" }),
+    columnHelper.accessor("name", {
+      header: "학교 이름",
+      cell: info => {
+        const name = info.getValue<string>();
+        return name && name.trim() !== "" ? name : "-";
+      },
+    }),
     columnHelper.accessor("code", { header: "생성 코드" }),
     columnHelper.display({
       header: "생성 일자",

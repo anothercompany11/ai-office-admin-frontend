@@ -1,5 +1,5 @@
 import { apiFetch } from "@/util/fetch";
-import { CodeCreateReq, CodeDetailRes, CodeListRes } from "./dto/code";
+import { CodeCreateReq, CodeDetailRes, CodeListRes, CodeUpdateReq } from "./dto/code";
 
 // 코드 리스트 조회
 export const getCodeList = (params: { skip?: number; limit?: number } = {}) =>
@@ -36,3 +36,14 @@ export const extendCodes = (code_ids: string[]) =>
 
 // 코드 상세 조회
 export const getCodeDetail = (codeId: string) => apiFetch(`/codes/${codeId}`) as Promise<CodeDetailRes>;
+
+// 코드 수정
+export const updateCode = (
+  code_id: string,
+  data: CodeUpdateReq
+) =>
+  apiFetch(`/codes/${code_id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  }) as Promise<CodeDetailRes>;

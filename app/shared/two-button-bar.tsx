@@ -32,7 +32,7 @@ const TwoButtonBar = ({
         loading={loading}
         type="button"
         onClick={onClickSecondBtn}
-        disabled={disabled}
+        disabled={disabled || loading}
         className={disabled ? "bg-gray-300" : ""}
       >
         {secondBtnTxt}
