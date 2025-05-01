@@ -54,3 +54,17 @@ const customTwMerge = extendTailwindMerge({
 export function cn(...inputs: ClassValue[]) {
   return customTwMerge(clsx(inputs));
 }
+
+/**
+ * \( … \)  → $ … $
+ * \[ … \]  → $$ … $$
+ */
+export function formatLatex(src: string) {
+  return (
+    src
+      // 블록 수식 변환
+      .replace(/\\\[\s*([\s\S]+?)\s*\\\]/g, (_, exp) => `$$${exp}$$`)
+      // 인라인 수식 변환
+      .replace(/\\\(\s*([^$]+?)\s*\\\)/g, (_, exp) => `$${exp}$`)
+  );
+}

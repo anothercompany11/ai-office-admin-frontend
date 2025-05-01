@@ -28,7 +28,7 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.5609 0.2563 292.24);
+  --primary: rgba(0, 172, 120, 1);
   --primary-foreground: oklch(0.985 0 0);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
@@ -88,6 +88,12 @@
   }
   .text-subtitle-l {
     font-size: 18px;
+    line-height: 150%;
+    letter-spacing: -0.3%;
+    font-weight: 600;
+  }
+  .text-subtitle-m {
+    font-size: 16px;
     line-height: 150%;
     letter-spacing: -0.3%;
     font-weight: 600;
@@ -255,5 +261,8 @@
   p,
   span {
     @apply whitespace-pre-line;
+  }
+  button {
+    @apply cursor-pointer
   }
 }
