@@ -1,10 +1,13 @@
 import { apiFetch } from "@/util/fetch";
 import { LoginPostReq } from "./dto/auth";
 
+const isDev = process.env.NODE_ENV === "development";
+
 // 로그인 요청
+const loginPath = isDev ? "/auth/dev/login" : "/auth/login";
 export const postLogin = async (data: LoginPostReq) => {
   return apiFetch(
-    "/auth/login",
+    loginPath,
     {
       method: "POST",
       body: JSON.stringify(data),
@@ -27,8 +30,9 @@ export const postLogout = async () => {
 };
 
 // 토큰 재발급 요청
+const refreshPath = isDev ? "/auth/dev/refresh" : "/auth/refresh";
 export const postRefreshToken = async (csrf_token: string) => {
-  return apiFetch("/auth/refresh", {
+  return apiFetch(refreshPath, {
     method: "POST",
     body: JSON.stringify({ csrf_token }),
   });

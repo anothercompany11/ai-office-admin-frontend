@@ -1,4 +1,5 @@
-export const dynamic = "force-dynamic";
+"use client";
+
 import Loading from "@/app/shared/loading";
 import PageCrumble from "@/app/shared/page-crumble";
 import CodeListContainer from "./_components/code-list-container";
