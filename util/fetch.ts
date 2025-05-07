@@ -101,9 +101,9 @@ export const apiFetch = async (
 
   const fetchWithToken = async (token?: string | null) => {
     const headers = {
+      ...(options.headers || {}), // 기존 헤더 먼저
       "Content-Type": "application/json",
-      ...(noAuth ? {} : { Authorization: `Bearer ${token}` }),
-      ...(options.headers || {}),
+      ...(noAuth ? {} : { Authorization: `Bearer ${token}` }), // 새 토큰으로 덮어씀
     };
 
     const fetchOptions: RequestInit = {
@@ -160,38 +160,3 @@ export const apiFetch = async (
 
   return null;
 };
-
-// export async function apiFetch(input: string, init: RequestInit = {}): Promise<unknown> {
-//   const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
-//   const doFetch = async (token?: string | null) => {
-//     const res = await fetch(`${BASE_URL}${input}`, {
-//       credentials: "include",
-//       ...init,
-//       headers: {
-//         "Content-Type": "application/json",
-//         ...(token ? { Authorization: `Bearer ${token}` } : {}),
-//         ...(init.headers || {}),
-//       },
-//     });
-
-//     // 204(본문 없음) → 바로 null 반환
-//     if (res.status === 204) return null;
-
-//     // 정상 JSON 파싱
-//     const data = res.headers.get("Content-Type")?.includes("application/json") ? await res.json() : await res.text();
-
-//     if (res.ok) return data;
-
-//     // 401 → 토큰 재발급 후 1회 재시도
-//     if (res.status === 401) {
-//       const newToken = await ensureFreshToken();
-//       if (!newToken) throw new Error("unauthorized");
-//       return doFetch(newToken); // 재귀 한 번
-//     }
-
-//     // 기타 오류
-//     throw new Error(typeof data === "string" ? data : "API error " + res.status);
-//   };
-
-//   return doFetch(getAccessToken());
-// }

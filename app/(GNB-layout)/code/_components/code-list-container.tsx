@@ -5,7 +5,7 @@ import FilterAndTableContainer from "./filter-and-table-container";
 
 export default function CodeListContainer() {
   const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(30);
+  const [pageSize, setPageSize] = useState(10);
 
   const res = useGetCodeList(pageIndex, pageSize);
 
