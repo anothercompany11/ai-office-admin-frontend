@@ -2,7 +2,7 @@ import { postLogin, postLogout } from "@/app/api/auth";
 import { loginSchema } from "@/schema/auth";
 import { useAuthStore } from "@/stores/auth-store";
 import { CustomError } from "@/util/fetch";
-import { CSRFTokenStorage, RefreshTokenStorage } from "@/util/storage";
+import { AdminAccountStorage, CSRFTokenStorage, RefreshTokenStorage } from "@/util/storage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -25,11 +25,17 @@ export const useLogin = (onSuccess: () => void, onFail: (val: string) => void) =
     try {
       const isDev = process.env.NODE_ENV === "development";
       const response = await postLogin(data);
-      const { access_token, csrf_token } = response;
+      const { access_token, csrf_token, admin_id, name, role } = response;
 
       if (!access_token) throw new CustomError(500, "액세스 토큰이 없습니다.");
+      const adminInfo = {
+        admin_id,
+        name,
+        role,
+      };
 
       useAuthStore.getState().setAccessToken(access_token);
+      AdminAccountStorage.setAdminInfo(adminInfo);
 
       if (csrf_token) {
         CSRFTokenStorage.setToken(csrf_token);
@@ -68,6 +74,7 @@ export const usePostLogout = () => {
       toast("잠시 후 다시 시도해주세요");
     } finally {
       useAuthStore.getState().clearAuth();
+      AdminAccountStorage.removeAdminInfo();
 
       // DEV 환경인 경우 리프레쉬 토큰 스토리지 초기화
       const isDev = process.env.NODE_ENV === "development";
