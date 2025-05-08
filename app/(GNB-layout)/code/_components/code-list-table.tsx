@@ -51,17 +51,18 @@ export function CodeListTable({
         />
       ),
       cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} />,
-      size: 48,
     }),
     columnHelper.accessor("name", {
       header: "학교 이름",
+      id: "name",
       cell: (info) => {
         const name = info.getValue<string>();
         return name && name.trim() !== "" ? name : "-";
       },
     }),
-    columnHelper.accessor("code", { header: "생성 코드" }),
+    columnHelper.accessor("code", { id: "code", header: "생성 코드" }),
     columnHelper.display({
+      id: "created_at",
       header: "생성 일자",
       cell: ({ row }) => `${formattedDate(row.original.created_at)}`,
     }),
@@ -149,7 +150,20 @@ export function CodeListTable({
               {hg.headers.map((h, i) => (
                 <TableHead
                   key={h.id}
-                  className={cn(i === 0 ? "border-x" : "border-r", h.column.id === "memo" ? "w-[100px]" : "")}
+                  className={cn(
+                    // 공통 테두리
+                    i === 0 ? "border-x" : "border-r",
+                    // 체크박스 컬럼
+                    h.column.id === "select" ? "w-[42px]" : "",
+                    // 학교 이름 칼럼
+                    h.column.id === "name" ? "w-[calc(25%)] min-w-[200px]" : "",
+                    // 생성 코드 칼럼
+                    h.column.id === "code" ? "w-[calc(15%)] min-w-[160px]" : "",
+                    // 생성 일자 칼럼
+                    h.column.id === "created_at" ? "w-[calc(15%)] min-w-[160px]" : "",
+                    // 메모 컬럼
+                    h.column.id === "memo" ? "w-[100px]" : ""
+                  )}
                 >
                   {h.isPlaceholder ? null : flexRender(h.column.columnDef.header, h.getContext())}
                 </TableHead>

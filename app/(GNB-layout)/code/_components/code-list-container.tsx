@@ -19,6 +19,7 @@ export default function CodeListContainer() {
         pageSize={pageSize}
         setPageSize={setPageSize}
         totalPages={res.meta?.total_pages || 0}
+        totalDataLength={res.meta?.total || 0}
       />
     </div>
   );

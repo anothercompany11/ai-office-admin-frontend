@@ -11,6 +11,7 @@ interface Props {
   pageSize: number;
   setPageSize: (n: number) => void;
   totalPages: number;
+  totalDataLength: number;
 }
 
 export default function FilterAndTableContainer({
@@ -20,6 +21,7 @@ export default function FilterAndTableContainer({
   pageSize,
   setPageSize,
   totalPages,
+  totalDataLength,
 }: Props) {
   const [filteredData, setFilteredData] = useState<Code[]>(data);
 
@@ -43,7 +45,7 @@ export default function FilterAndTableContainer({
         data={currentData}
         currentPage={currentPage}
         totalPages={totalPages}
-        totalDataLength={filteredData.length}
+        totalDataLength={totalDataLength}
         pageSize={pageSize}
         setPageSize={(n) => {
           setPageSize(n);
