@@ -26,18 +26,26 @@ export default function ConversationSection({ conversations }: ConversationSecti
                 <div className="space-y-6">
                   {conv.messages.map((msg) => (
                     <div key={msg.id} className={cn(msg.role === "user" ? "flex justify-end" : "flex justify-start")}>
-                     <div className="flex gap-3">
-                      {msg.role !== "user" && <Image src="/png/robot.png" width={42} height={42} alt="로봇" className="rounded-full size-[42px]"/>}
-                     <div
-                        className={
-                          msg.role === "user"
-                            ? "bg-blue-100 py-2 px-4 rounded-[50px]"
-                            : "bg-white text-left py-2 px-4 rounded-[20px] max-w-[80%]"
-                        }
-                      >
-                        <MarkdownRenderer content={msg.content} />
+                      <div className="flex gap-3">
+                        {msg.role !== "user" && (
+                          <Image
+                            src="/png/robot.png"
+                            width={42}
+                            height={42}
+                            alt="로봇"
+                            className="rounded-full size-[42px]"
+                          />
+                        )}
+                        <div
+                          className={
+                            msg.role === "user"
+                              ? "bg-blue-100 py-2 px-4 rounded-[50px]"
+                              : "bg-white text-left py-2 px-4 rounded-[20px] max-w-[80%]"
+                          }
+                        >
+                          <MarkdownRenderer content={msg.content} />
+                        </div>
                       </div>
-                     </div>
                     </div>
                   ))}
                 </div>

@@ -23,7 +23,9 @@ const LoginForm = () => {
           <CustomInputField type="password" form={form} name="password" placeholder="비밀번호를 입력해주세요." />
           {error && <p className="pl-[6px] text-caption text-status-error">{error}</p>}
         </div>
-        <Button loading={loading} type="submit">로그인</Button>
+        <Button loading={loading} type="submit">
+          로그인
+        </Button>
       </form>
     </Form>
   );
