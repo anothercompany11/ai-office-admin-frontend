@@ -41,7 +41,6 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
   };
 
   const filterData = () => {
-    setCurrentPage(1); // 페이지 초기화
     let filtered = data;
 
     /* 검색어 */
