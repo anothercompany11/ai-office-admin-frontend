@@ -62,7 +62,7 @@ export default function AdminCreateModal({ open, onOpenChange, page, size }: Pro
       }}
     >
       <DialogContent className="w-full max-w-[400px]">
-        <DialogTitle/>
+        <DialogTitle />
         <div className="flex justify-between items-center mb-8 border">
           <p className="text-title-l">관리자 생성하기</p>
           <button onClick={() => onOpenChange(false)}>
