@@ -9,9 +9,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-white disabled:bg-primary/10",
+        default: "bg-primary text-white disabled:bg-primary/50",
         pink: "bg-[#FF6668] text-white",
-        destructive: "border-status-error border text-status-error",
+        destructive: "border-status-error border disabled:border-gray-300 text-status-error",
         outline: "border bg-white text-black disabled:bg-gray-100",
         "outline-black": "border border-black disabled:border-gray-300",
       },
