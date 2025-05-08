@@ -59,7 +59,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
             <CustomInputField
               form={form}
               name="name"
-              placeholder="학교 이름을 입력해주세요."
+              placeholder="학교 이름을 입력하세요"
               label="학교 이름"
               isValid={!formState.errors.name}
               validText={formState.errors.name?.message}
@@ -72,7 +72,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
                 <FormItem>
                   <FormLabel className="mb-2">관리자 메모</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={3} placeholder="관리자 메모를 입력하세요." />
+                    <Textarea {...field} rows={3} placeholder="관리자 메모를 입력하세요" />
                   </FormControl>
                 </FormItem>
               )}
@@ -102,7 +102,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
                 type="number"
                 form={form}
                 name="count"
-                placeholder="개수를 입력해주세요"
+                placeholder="생성 개수를 입력하세요"
                 isValid={!formState.errors.count}
                 validText={formState.errors.count?.message}
               />
