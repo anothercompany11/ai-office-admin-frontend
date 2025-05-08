@@ -35,10 +35,7 @@ const AccountTableHeader = ({
           options={[10, 20, 30, 40].map((n) => ({ label: `${n}개씩 보기`, value: String(n) }))}
         />
       </div>
-      <Button
-        className="w-[97px]"
-        onClick={() => setCreateOpen(true)}
-      >
+      <Button className="w-[97px]" onClick={() => setCreateOpen(true)}>
         생성하기
       </Button>
       {isCreateOpen && <AdminCreateModal open={isCreateOpen} onOpenChange={setCreateOpen} page={page} size={size} />}
