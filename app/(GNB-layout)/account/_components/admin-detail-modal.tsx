@@ -1,9 +1,11 @@
 import { AdminUser } from "@/app/api/dto/account";
+import { AdminRole } from "@/app/api/dto/auth";
 import TwoButtonBar from "@/app/shared/two-button-bar";
 import TwoButtonModal from "@/app/shared/two-button-modal";
 import useDeleteAdminAccount from "@/hooks/use-delete-account";
 import useResetAdminPassword from "@/hooks/use-reset-password";
 import formattedDate, { DateType } from "@/util/date";
+import { AdminAccountStorage } from "@/util/storage";
 import { XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -25,6 +27,8 @@ const AdminDetailModal = ({ user, handleCloseModal, page, size, targetAccount }:
   const { deleteAccount, isDeleting } = useDeleteAdminAccount(page, size, handleCloseModal);
   const { resetPassword, isResetting } = useResetAdminPassword();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false); // 계정 삭제 확인 모달
+ const adminInfo = AdminAccountStorage.getAdminInfo();
+  const isSuperAdmin = adminInfo?.role == AdminRole.SUPER_ADMIN
 
   // 모달 상태에 따른 body 스크롤 조작
   useEffect(() => {
@@ -63,12 +67,12 @@ const AdminDetailModal = ({ user, handleCloseModal, page, size, targetAccount }:
               <XIcon className="size-6 text-component" />
             </button>
           </div>
-          <div className="">
+          <div className={`flex flex-col gap-3 ${isSuperAdmin ? "" : "mb-10"}`}>
             {ADMIN_INFO_KEY_VALUE.map((info) => (
               <AdminInfoRow {...info} key={info.title} />
             ))}
           </div>
-          <TwoButtonBar
+          {isSuperAdmin && <TwoButtonBar
             firstBtnDisabled={isDeleting}
             disabled={isResetting}
             firstBtnTxt="관리자 삭제"
@@ -76,7 +80,7 @@ const AdminDetailModal = ({ user, handleCloseModal, page, size, targetAccount }:
             size="lg"
             onClickFirstBtn={onOpenDeleteModal}
             onClickSecondBtn={onReset}
-          />
+          />}
           {deleteModalOpen && (
             <TwoButtonModal
               title="관리자를 삭제하시나요?"
