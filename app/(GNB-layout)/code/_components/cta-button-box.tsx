@@ -25,7 +25,7 @@ const CTAButtonBox = ({ handleClearSelection, selectedIds, skip, limit }: CTABut
   const isEmpty = selectedIds.length === 0;
   return (
     <div className="flex gap-2">
-      <Button variant={"outline-black"} disabled={isEmpty} onClick={() => setShowDelModal(true)}>
+      <Button variant={"destructive"} disabled={isEmpty} onClick={() => setShowDelModal(true)}>
         삭제하기
       </Button>
       <Button variant={"outline-black"} disabled={isEmpty} onClick={() => setShowExtModal(true)}>

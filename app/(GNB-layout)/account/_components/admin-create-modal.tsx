@@ -2,7 +2,7 @@
 import CustomInputField from "@/app/shared/custom-input-field";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import useCreateAdminAccount from "@/hooks/use-create-account";
@@ -59,12 +59,14 @@ export default function AdminCreateModal({ open, onOpenChange, page, size }: Pro
       }}
     >
       <DialogContent className="w-full max-w-[400px] gap-10">
-        <div className="flex justify-between items-center">
-          <p className="text-title-l">관리자 생성하기</p>
+        <DialogHeader className="flex flex-row justify-between items-center">
+          <DialogTitle className="text-title-l" asChild>
+            <p>관리자 생성하기</p>
+          </DialogTitle>
           <button onClick={() => onOpenChange(false)}>
             <XIcon className="size-6 text-component" />
           </button>
-        </div>
+        </DialogHeader>
 
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="">
@@ -94,11 +96,7 @@ export default function AdminCreateModal({ open, onOpenChange, page, size }: Pro
                     <FormItem>
                       <FormLabel>비밀번호</FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="비밀번호를 입력해주세요."
-                          disabled={useDefault}
-                        />
+                        <Input {...field} placeholder="비밀번호를 입력해주세요." disabled={useDefault} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -115,11 +113,10 @@ export default function AdminCreateModal({ open, onOpenChange, page, size }: Pro
                           onCheckedChange={(checked) => {
                             field.onChange(checked);
                             // 토글 켜면 비밀번호 자동 세팅, 끄면 빈 값
-                            setValue(
-                                "password",
-                                checked ? "00000000" : "",
-                                { shouldValidate: true, shouldDirty: true }
-                              );
+                            setValue("password", checked ? "00000000" : "", {
+                              shouldValidate: true,
+                              shouldDirty: true,
+                            });
                           }}
                         />
                       </FormControl>

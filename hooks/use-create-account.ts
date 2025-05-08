@@ -16,9 +16,9 @@ export default function useCreateAdminAccount(page: number, size: number) {
       try {
         await createAdminAccount(body);
         await mutate(key);
-        toast("계정 생성 성공")
+        toast("계정 생성 성공");
       } catch {
-        toast("계정 생성 실패", {description:"잠시 후 다시 시도해주세요"})
+        toast("계정 생성 실패", { description: "잠시 후 다시 시도해주세요" });
       } finally {
         setIsCreating(false);
       }

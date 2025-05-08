@@ -14,7 +14,7 @@ const LoginForm = () => {
   const onSuccess = () => {
     router.replace(CODE_PAGE);
   };
-  const { form, onSubmit } = useLogin(onSuccess, setError);
+  const { form, onSubmit, loading } = useLogin(onSuccess, setError);
   return (
     <Form {...form}>
       <form onSubmit={onSubmit} className="flex w-full flex-col gap-4">
@@ -23,7 +23,7 @@ const LoginForm = () => {
           <CustomInputField type="password" form={form} name="password" placeholder="비밀번호를 입력해주세요." />
           {error && <p className="pl-[6px] text-caption text-status-error">{error}</p>}
         </div>
-        <Button type="submit">로그인</Button>
+        <Button loading={loading} type="submit">로그인</Button>
       </form>
     </Form>
   );

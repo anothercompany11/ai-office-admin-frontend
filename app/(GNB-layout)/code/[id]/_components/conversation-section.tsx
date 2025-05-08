@@ -1,6 +1,7 @@
 import { Conversation } from "@/app/api/dto/code";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import MarkdownRenderer from "./markdown-renderer";
 
 interface ConversationSectionProps {
@@ -22,10 +23,12 @@ export default function ConversationSection({ conversations }: ConversationSecti
             <AccordionItem key={conv.id} value={conv.id} className="border-b">
               <AccordionTrigger>{conv.title}</AccordionTrigger>
               <AccordionContent>
-                <div className="space-y-4 ">
+                <div className="space-y-6">
                   {conv.messages.map((msg) => (
                     <div key={msg.id} className={cn(msg.role === "user" ? "flex justify-end" : "flex justify-start")}>
-                      <div
+                     <div className="flex gap-3">
+                      {msg.role !== "user" && <Image src="/png/robot.png" width={42} height={42} alt="로봇" className="rounded-full size-[42px]"/>}
+                     <div
                         className={
                           msg.role === "user"
                             ? "bg-blue-100 py-2 px-4 rounded-[50px]"
@@ -34,6 +37,7 @@ export default function ConversationSection({ conversations }: ConversationSecti
                       >
                         <MarkdownRenderer content={msg.content} />
                       </div>
+                     </div>
                     </div>
                   ))}
                 </div>
