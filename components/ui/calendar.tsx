@@ -18,9 +18,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: R
         caption: "flex justify-center pt-1 relative items-center w-full",
         caption_label: "text-sm font-medium",
         nav: "flex items-center gap-1",
-        nav_button: cn(
-          "size-7 bg-transparent p-0 opacity-50 hover:opacity-100"
-        ),
+        nav_button: cn("size-7 bg-transparent p-0 opacity-50 hover:opacity-100"),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-x-1",
@@ -32,7 +30,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: R
           buttonVariants(),
           "size-8 p-0 font-normal bg-transparent text-black disabled:bg-transparent disabled:opacity-50"
         ),
-        day_range_start: "day-range-start aria-selected:bg-primary aria-selected:text-primary-foreground rounded-l-full",
+        day_range_start:
+          "day-range-start aria-selected:bg-primary aria-selected:text-primary-foreground rounded-l-full",
         day_range_end: "day-range-end aria-selected:bg-primary aria-selected:text-primary-foreground rounded-r-full",
         day_selected:
           "bg-red-300 text-red-300 text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
