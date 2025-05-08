@@ -27,8 +27,8 @@ const AdminDetailModal = ({ user, handleCloseModal, page, size, targetAccount }:
   const { deleteAccount, isDeleting } = useDeleteAdminAccount(page, size, handleCloseModal);
   const { resetPassword, isResetting } = useResetAdminPassword();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false); // 계정 삭제 확인 모달
- const adminInfo = AdminAccountStorage.getAdminInfo();
-  const isSuperAdmin = adminInfo?.role == AdminRole.SUPER_ADMIN
+  const adminInfo = AdminAccountStorage.getAdminInfo();
+  const isSuperAdmin = adminInfo?.role == AdminRole.SUPER_ADMIN;
 
   // 모달 상태에 따른 body 스크롤 조작
   useEffect(() => {
@@ -72,15 +72,17 @@ const AdminDetailModal = ({ user, handleCloseModal, page, size, targetAccount }:
               <AdminInfoRow {...info} key={info.title} />
             ))}
           </div>
-          {isSuperAdmin && <TwoButtonBar
-            firstBtnDisabled={isDeleting}
-            disabled={isResetting}
-            firstBtnTxt="관리자 삭제"
-            secondBtnTxt="비밀번호 초기화"
-            size="lg"
-            onClickFirstBtn={onOpenDeleteModal}
-            onClickSecondBtn={onReset}
-          />}
+          {isSuperAdmin && (
+            <TwoButtonBar
+              firstBtnDisabled={isDeleting}
+              disabled={isResetting}
+              firstBtnTxt="관리자 삭제"
+              secondBtnTxt="비밀번호 초기화"
+              size="lg"
+              onClickFirstBtn={onOpenDeleteModal}
+              onClickSecondBtn={onReset}
+            />
+          )}
           {deleteModalOpen && (
             <TwoButtonModal
               title="관리자를 삭제하시나요?"

@@ -45,7 +45,12 @@ export default function AdminUserTable() {
               <TableCell>{user.login_id}</TableCell>
               <TableCell>{formattedDate(user.created_at)}</TableCell>
               <TableCell className="w-[120px]">
-                <button className="border border-line-strong rounded-sm py-[6px] px-[17px]" onClick={() => setSelectedUser(user)}>상세보기</button>
+                <button
+                  className="border border-line-strong rounded-sm py-[6px] px-[17px]"
+                  onClick={() => setSelectedUser(user)}
+                >
+                  상세보기
+                </button>
               </TableCell>
             </TableRow>
           ))}
