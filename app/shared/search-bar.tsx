@@ -41,7 +41,9 @@ const SearchBar = ({ placeholder, setKeyword, onReset }: SearchBarProps) => {
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={handleKeyDown}
           />
-          <button className="absolute right-0 mr-3" onClick={() => setKeyword(inputValue.trim())}><SearchIcon className="size-[18px] text-label" /></button>
+          <button className="absolute right-0 mr-3" onClick={() => setKeyword(inputValue.trim())}>
+            <SearchIcon className="size-[18px] text-label" />
+          </button>
         </div>
 
         {/* 초기화 버튼 */}
