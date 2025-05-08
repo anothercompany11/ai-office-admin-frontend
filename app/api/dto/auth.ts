@@ -1,7 +1,7 @@
 // 관리자 계정 유형
 export enum AdminRole {
-  ADMIN = "ADMIN",
-  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "admin",
+  SUPER_ADMIN = "super_admin",
 }
 
 // 로그인 요청
