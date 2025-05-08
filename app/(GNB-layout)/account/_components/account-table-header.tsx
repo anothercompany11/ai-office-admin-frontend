@@ -26,6 +26,7 @@ const AccountTableHeader = ({
   const [isCreateOpen, setCreateOpen] = useState(false); // 계정 생성 모달
   const adminInfo = AdminAccountStorage.getAdminInfo();
   const isSuperAdmin = adminInfo?.role == AdminRole.SUPER_ADMIN;
+  console.log(isSuperAdmin, adminInfo);
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
