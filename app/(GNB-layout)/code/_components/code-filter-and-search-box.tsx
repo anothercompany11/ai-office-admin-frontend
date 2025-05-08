@@ -36,12 +36,12 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
 
     setDuration({ start: yesterday, end: endPlusOne });
     setChatStatus("all");
-    // setCurrentPage(1);
+    setCurrentPage(1);
     setFilteredData(data);
   };
 
   const filterData = () => {
-    // setCurrentPage(1); // 페이지 초기화
+    setCurrentPage(1); // 페이지 초기화
     let filtered = data;
 
     /* 검색어 */
