@@ -8,6 +8,7 @@ interface TwoButtonModalProps {
   buttonText: string; // 버튼 텍스트
   onClickFirstBtn: () => void; // 버튼 핸들러
   onClickSecondBtn: () => void; // 버튼 핸들러
+  children?: React.ReactNode; // 커스텀 콘텐츠
 }
 
 const TwoButtonModal = ({
@@ -17,6 +18,7 @@ const TwoButtonModal = ({
   buttonText,
   onClickFirstBtn,
   onClickSecondBtn,
+  children,
 }: TwoButtonModalProps) => {
   // body overflow 설정
   useEffect(() => {
@@ -33,10 +35,14 @@ const TwoButtonModal = ({
     <div className="fixed inset-0 z-10 flex items-center justify-center overflow-hidden bg-black/70">
       <div className="w-[319px] rounded-[20px] bg-white pt-8 px-4 pb-4">
         <div className="flex flex-col gap-6">
-          <div className="flex items-center text-center justify-center flex-col gap-2">
-            <p className="text-title-l text-label-strong">{title}</p>
-            {desc && <p className="text-subtitle-s text-label-natural">{desc}</p>}
-          </div>
+          {children ? (
+            children
+          ) : (
+            <div className="flex items-center text-center justify-center flex-col gap-2">
+              {title && <p className="text-title-l text-label-strong">{title}</p>}
+              {desc && <p className="text-subtitle-s text-label-natural">{desc}</p>}
+            </div>
+          )}
           <TwoButtonBar
             loading={loading}
             firstBtnTxt="취소"

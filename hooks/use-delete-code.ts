@@ -18,11 +18,16 @@ export default function useDeleteCodes(skip: number, limit: number, onSuccess?: 
       if (onSuccess) {
         onSuccess();
       }
+      /* eslint-disable @typescript-eslint/no-explicit-any */
     } catch (err: any) {
       setError(err);
-    } finally {
+      console.error(err);
       toast("코드 삭제 실패", {
         description: "잠시 후 다시 시도해주세요",
+      });
+    } finally {
+      toast("코드 삭제 성공", {
+        description: "코드가 삭제되었어요",
       });
       setIsDeleting(false);
     }

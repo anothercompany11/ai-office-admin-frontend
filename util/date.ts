@@ -1,4 +1,4 @@
-enum DateType {
+export enum DateType {
   DEFAULT_FULL, // 2024.01.01
   DEFAULT_MONTH_DATE, // 01.01
   TEXT_FULL, // 2024년 01월 01일

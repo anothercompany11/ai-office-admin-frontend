@@ -19,7 +19,7 @@ export interface ResponseError {
   details: ResponseErrorDetail;
 }
 
-// 관리자 계정 엔티티
+// 관리자 계정
 export interface AdminUser {
   id: string;
   login_id: string;
@@ -40,4 +40,11 @@ export interface AdminUserListRes {
   data: AdminUser[] | null;
   meta: ResponseMeta;
   errors: ResponseError[] | null;
+}
+
+// 관리자 계정 생성 요청
+export interface AdminCreateReq {
+  login_id: string;
+  name: string;
+  password: string;
 }

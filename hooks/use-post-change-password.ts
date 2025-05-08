@@ -1,6 +1,6 @@
 "use client";
 
-import { changePassword } from "@/app/api/admin";
+import { changePassword } from "@/app/api/account";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";

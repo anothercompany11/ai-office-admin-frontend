@@ -1,7 +1,7 @@
 "use client";
 
-import { getAdminAccountList } from "@/app/api/admin";
-import { AdminUserListRes } from "@/app/api/dto/admin";
+import { getAdminAccountList } from "@/app/api/account";
+import { AdminUserListRes } from "@/app/api/dto/account";
 import useSWR from "swr";
 
 export default function useGetAdminAccountList(page: number, size: number) {

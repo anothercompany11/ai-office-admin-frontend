@@ -36,12 +36,12 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
 
     setDuration({ start: yesterday, end: endPlusOne });
     setChatStatus("all");
-    setCurrentPage(1);
+    // setCurrentPage(1);
     setFilteredData(data);
   };
 
   const filterData = () => {
-    setCurrentPage(1); // 페이지 초기화
+    // setCurrentPage(1); // 페이지 초기화
     let filtered = data;
 
     /* 검색어 */
@@ -51,7 +51,7 @@ const CodeFilterAndSearchBox = ({ data, setFilteredData, setCurrentPage }: CodeF
         (item) => item.code.toLowerCase().includes(lower) || item.name.toLowerCase().includes(lower)
       );
     }
-    console.log("1", filtered);
+
     /* 기간 */
     if (duration && duration.start && duration.end) {
       // duration.start/end 는 사용자가 고른 날짜의 00:00:00 이라 가정

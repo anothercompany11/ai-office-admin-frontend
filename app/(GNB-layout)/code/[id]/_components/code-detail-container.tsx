@@ -111,7 +111,7 @@ export default function CodeDetailContainer({
           <p className="text-body-2 text-gray-800">{formattedDate(created_at)}</p>
         </div>
         <div className="flex gap-3 items-center">
-          <p className="text-subtitle-m w-[120px]">이용 가능 횟수</p>
+          <p className="text-subtitle-m w-[120px]">사용 / 가능 횟수</p>
           <p className="text-body-2 text-gray-800">
             {prompt_count} / {prompt_limit}
           </p>

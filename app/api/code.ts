@@ -2,10 +2,10 @@ import { apiFetch } from "@/util/fetch";
 import { CodeCreateReq, CodeDetailRes, CodeListRes, CodeUpdateReq } from "./dto/code";
 
 // 코드 리스트 조회
-export const getCodeList = (params: { skip?: number; limit?: number } = {}) =>
+export const getCodeList = (params: { page?: number; limit?: number } = {}) =>
   apiFetch(
     `/codes?${new URLSearchParams({
-      skip: String(params.skip ?? 0),
+      page: String(params.page ?? 1),
       limit: String(params.limit ?? 10),
     })}`
   ) as Promise<CodeListRes>;

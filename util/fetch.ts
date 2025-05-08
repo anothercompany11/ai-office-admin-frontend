@@ -1,6 +1,6 @@
 import { LOGIN_PAGE } from "@/constants/path";
 import { useAuthStore } from "@/stores/auth-store";
-import { CSRFTokenStorage } from "./storage";
+import { CSRFTokenStorage, RefreshTokenStorage } from "./storage";
 
 const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL!;
 
@@ -53,17 +53,29 @@ const processQueue = (error: Error | null = null) => {
 const getAccessToken = () => {
   return useAuthStore.getState().accessToken;
 };
-
-// 토큰 재발급
 const refreshAccessToken = async () => {
+  const isDev = process.env.NODE_ENV === "development";
   try {
     const csrfToken = CSRFTokenStorage.getToken();
     if (!csrfToken) throw new CustomError(401, "CSRF 토큰이 없습니다.");
 
-    const response = await fetch(`${BASE_URL}/auth/refresh`, {
+    const refreshPath = isDev ? "/auth/dev/refresh" : "/auth/refresh";
+
+    const body: Record<string, string> = {
+      csrf_token: csrfToken,
+    };
+
+    // DEV 환경인 경우 리프레쉬 토큰을 body로 전달
+    if (isDev) {
+      const refreshToken = RefreshTokenStorage.getToken();
+      if (!refreshToken) throw new CustomError(401, "refresh token이 없습니다.");
+      body.refresh_token = refreshToken;
+    }
+
+    const response = await fetch(`${BASE_URL}${refreshPath}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ csrf_token: csrfToken }),
+      body: JSON.stringify(body),
       credentials: "include",
     });
 
@@ -79,10 +91,21 @@ const refreshAccessToken = async () => {
       CSRFTokenStorage.setToken(data.csrf_token);
     }
 
+    // DEV 환경인 경우 리프레쉬 토큰 업데이트
+    if (isDev) {
+      RefreshTokenStorage.setToken(data.refresh_token);
+    }
+
     return data.access_token;
   } catch (error) {
     useAuthStore.getState().clearAuth();
     CSRFTokenStorage.removeToken();
+
+    // DEV 환경인 경우 리프레쉬 토큰 스토리지 초기화
+    if (isDev) {
+      RefreshTokenStorage.removeToken();
+    }
+
     if (typeof window !== "undefined") {
       window.location.href = LOGIN_PAGE;
     }
@@ -115,31 +138,29 @@ export const apiFetch = async (
     return fetch(fullUrl, fetchOptions);
   };
 
-  let token = getAccessToken();
+  const token = getAccessToken();
   const response = await fetchWithToken(token);
 
-  // 401 Unauthorized 처리
+  // 401 응답인 경우
   if (response.status === 401 && !noAuth) {
+    // 현재 요청을 큐에 추가
+    const retryPromise = new Promise<FetchValue>((resolve, reject) => {
+      failedQueue.push({ resolve, reject, config: { url, options, responseType, noAuth } });
+    });
+
+    // refresh 시작
     if (!isRefreshing) {
       isRefreshing = true;
-      try {
-        token = await refreshAccessToken();
-        processQueue(null);
-      } catch (err) {
-        processQueue(err as Error);
-        throw err;
-      } finally {
-        isRefreshing = false;
-      }
+      refreshAccessToken()
+        .then(() => processQueue(null))
+        .catch((err) => processQueue(err as Error))
+        .finally(() => {
+          isRefreshing = false;
+        });
     }
 
-    return new Promise((resolve, reject) => {
-      failedQueue.push({
-        resolve,
-        reject,
-        config: { url, options, responseType, noAuth },
-      });
-    });
+    // 큐에 추가한 프로미스를 반환
+    return retryPromise;
   }
 
   if (!response.ok) {
