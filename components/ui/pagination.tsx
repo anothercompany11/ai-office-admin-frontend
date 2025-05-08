@@ -19,7 +19,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
           type="button"
           key={i}
           onClick={() => onPageChange(i)}
-          className={`h-6 min-w-[30px] text-center ${currentPage === i ? "underline underline-offset-4 heading-6" : "caption"}`}
+          className={`h-6 min-w-[30px] text-center ${currentPage === i ? "underline underline-offset-4 text-label-strong" : "text-label-alternative"}`}
         >
           {i}
         </button>
@@ -47,7 +47,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
           </>
         )}
 
-        <p className="flex items-center text-black caption">{renderPageNumbers()}</p>
+        <p className={`flex items-center text-subtitle-s`}>{renderPageNumbers()}</p>
 
         {endPage < totalPages && (
           <>

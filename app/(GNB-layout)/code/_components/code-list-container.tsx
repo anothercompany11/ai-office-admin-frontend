@@ -1,10 +1,9 @@
-"use client";
 import useGetCodeList from "@/hooks/use-get-code-list";
 import { useState } from "react";
 import FilterAndTableContainer from "./filter-and-table-container";
 
 export default function CodeListContainer() {
-  const [pageIndex, setPageIndex] = useState(0);
+  const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
   const res = useGetCodeList(pageIndex, pageSize);

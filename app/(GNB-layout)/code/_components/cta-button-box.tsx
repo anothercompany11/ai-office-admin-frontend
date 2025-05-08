@@ -1,4 +1,5 @@
 "use client";
+
 import { Code } from "@/app/api/dto/code";
 import TwoButtonModal from "@/app/shared/two-button-modal";
 import { Button } from "@/components/ui/button";
@@ -9,13 +10,14 @@ import CodeCreateModal from "./code-create-modal";
 
 interface CTAButtonBoxProps {
   selectedIds: Array<Code["id"]>;
+  handleClearSelection: () => void; // 선택된 아이디 배열을 초기화하는 함수
   skip: number;
   limit: number;
 }
 
-const CTAButtonBox = ({ selectedIds, skip, limit }: CTAButtonBoxProps) => {
-  const { remove, isDeleting } = useDeleteCodes(skip, limit);
-  const { extend, isExtending } = useExtendCodes(skip, limit);
+const CTAButtonBox = ({ handleClearSelection, selectedIds, skip, limit }: CTAButtonBoxProps) => {
+  const { remove, isDeleting } = useDeleteCodes(skip, limit, handleClearSelection);
+  const { extend, isExtending } = useExtendCodes(skip, limit, handleClearSelection);
 
   const [showDelModal, setShowDelModal] = useState(false);
   const [showExtModal, setShowExtModal] = useState(false);

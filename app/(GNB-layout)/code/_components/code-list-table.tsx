@@ -25,7 +25,6 @@ type Props = {
   pageSize: number;
   setPageSize: (n: number) => void;
   onPageChange: (p: number) => void;
-  skip: number;
   limit: number;
 };
 
@@ -37,7 +36,6 @@ export function CodeListTable({
   pageSize,
   setPageSize,
   onPageChange,
-  skip,
   limit,
 }: Props) {
   const columnHelper = createColumnHelper<Code>();
@@ -68,7 +66,7 @@ export function CodeListTable({
       cell: ({ row }) => `${formattedDate(row.original.created_at)}`,
     }),
     columnHelper.display({
-      header: "이용 가능 횟수",
+      header: "사용 / 가능 횟수",
       cell: ({ row }) => `${row.original.prompt_count} / ${row.original.prompt_limit}`,
     }),
     columnHelper.display({
@@ -108,15 +106,22 @@ export function CodeListTable({
     getPaginationRowModel: getPaginationRowModel(),
     initialState: { pagination: { pageIndex: currentPage - 1, pageSize } },
     onPaginationChange: (updater) => {
-      const next =
+      const nextZero =
         typeof updater === "function"
-          ? updater({ pageIndex: currentPage - 1, pageSize }).pageIndex
+          ? updater({ pageIndex: currentPage - 1, pageSize }).pageIndex!
           : updater.pageIndex!;
-      onPageChange(next + 1);
+      onPageChange(nextZero + 1);
     },
+    manualPagination: true,
+    pageCount: totalPages,
   });
 
   const selectedIds = table.getSelectedRowModel().rows.map((r) => r.original.id);
+
+  // 선택 초기화 함수
+  const handleClearSelection = () => {
+    setRowSelection({});
+  };
 
   return (
     <div className="flex flex-col min-w-[900px] gap-4 overflow-x-auto">
@@ -129,7 +134,12 @@ export function CodeListTable({
             options={[10, 20, 30, 40].map((n) => ({ label: `${n}개씩 보기`, value: String(n) }))}
           />
         </div>
-        <CTAButtonBox selectedIds={selectedIds} skip={skip} limit={limit} />
+        <CTAButtonBox
+          handleClearSelection={handleClearSelection}
+          selectedIds={selectedIds}
+          skip={currentPage}
+          limit={limit}
+        />
       </div>
 
       <Table className="">

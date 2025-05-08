@@ -1,15 +1,17 @@
 "use client";
-import TableSummaryText from "@/app/shared/table-summary-text";
-import { Button } from "@/components/ui/button";
+import { AdminUser } from "@/app/api/dto/account";
 import Pagination from "@/components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import useGetAdminAccountList from "@/hooks/use-get-account-list";
-
-import React from "react";
+import formattedDate from "@/util/date";
+import { useState } from "react";
+import AccountTableHeader from "./account-table-header";
+import AdminDetailModal from "./admin-detail-modal";
 
 export default function AdminUserTable() {
-  const [page, setPage] = React.useState(1);
-  const [size, setSize] = React.useState(10);
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+  const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const { data, meta } = useGetAdminAccountList(page, size);
 
   const totalPages = meta?.total_pages ?? 0;
@@ -17,57 +19,48 @@ export default function AdminUserTable() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center gap-2">
-          <TableSummaryText currentDataLen={data.length} totalDataLen={totalItems} />
-          <select
-            value={size}
-            onChange={(e) => {
-              setSize(Number(e.target.value));
-              setPage(1);
-            }}
-            className="h-8 rounded border px-2 text-sm"
-          >
-            {[10, 20, 30, 40].map((n) => (
-              <option key={n} value={n}>
-                {n}
-              </option>
-            ))}
-          </select>
-        </div>
-        <Button
-          onClick={() => {
-            /* TODO: 생성 모달 열기 */
-          }}
-        >
-          생성하기
-        </Button>
-      </div>
+      <AccountTableHeader
+        size={size}
+        page={page}
+        setPage={setPage}
+        setSize={setSize}
+        currentDataLen={data.length}
+        totalDataLen={totalItems}
+      />
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
-            <TableHead>로그인 ID</TableHead>
+            <TableHead>No.</TableHead>
             <TableHead>이름</TableHead>
-            <TableHead>활성 여부</TableHead>
-            <TableHead>최종 로그인</TableHead>
-            <TableHead>슈퍼 관리자</TableHead>
+            <TableHead>아이디</TableHead>
+            <TableHead>생성 일자</TableHead>
+            <TableHead>관리</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((user) => (
+          {data.map((user, index) => (
             <TableRow key={user.id}>
-              <TableCell>{user.id}</TableCell>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>{user.name ?? "관리자"}</TableCell>
               <TableCell>{user.login_id}</TableCell>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.is_active ? "활성" : "비활성"}</TableCell>
-              <TableCell>{new Date(user.last_login_at).toLocaleString()}</TableCell>
-              <TableCell>{user.is_super_admin ? "예" : "아니오"}</TableCell>
+              <TableCell>{formattedDate(user.created_at)}</TableCell>
+              <TableCell>
+                <button onClick={() => setSelectedUser(user)}>상세보기</button>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
       {totalPages > 0 && <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />}
+      {selectedUser && (
+        <AdminDetailModal
+          user={selectedUser}
+          handleCloseModal={() => setSelectedUser(null)}
+          page={page}
+          size={size}
+          targetAccount={selectedUser}
+        />
+      )}
     </div>
   );
 }

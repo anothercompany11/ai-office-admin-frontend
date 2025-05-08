@@ -10,6 +10,7 @@ interface TwoButtonBarProps {
   secondBtnVariant?: "default" | "pink" | "destructive" | "outline" | "outline-black";
   size?: "md" | "sm" | "lg";
   disabled?: boolean;
+  firstBtnDisabled?: boolean;
 }
 const TwoButtonBar = ({
   firstBtnTxt,
@@ -18,6 +19,8 @@ const TwoButtonBar = ({
   onClickSecondBtn,
   loading,
   disabled,
+  firstBtnDisabled,
+  size,
 }: TwoButtonBarProps) => {
   const router = useRouter();
 
@@ -25,10 +28,17 @@ const TwoButtonBar = ({
   const onClickBack = () => router.back();
   return (
     <div className="flex items-center gap-2">
-      <Button variant={"outline"} type="button" onClick={onClickFirstBtn ?? onClickBack}>
+      <Button
+        disabled={firstBtnDisabled}
+        size={size}
+        variant={"outline"}
+        type="button"
+        onClick={onClickFirstBtn ?? onClickBack}
+      >
         {firstBtnTxt}
       </Button>
       <Button
+        size={size}
         loading={loading}
         type="button"
         onClick={onClickSecondBtn}

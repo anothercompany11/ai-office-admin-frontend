@@ -1,6 +1,5 @@
 "use client";
 import { Code } from "@/app/api/dto/code";
-import { usePagination } from "@/hooks/use-pagination";
 import { useEffect, useState } from "react";
 import CodeFilterAndSearchBox from "./code-filter-and-search-box";
 import { CodeListTable } from "./code-list-table";
@@ -28,16 +27,8 @@ export default function FilterAndTableContainer({
     setFilteredData(data);
   }, [data]);
 
-  const { currentData, currentPage, setCurrentPage } = usePagination({
-    data: filteredData,
-    itemsPerPage: pageSize,
-    pageIndex: pageIndex + 1,
-    onPageChange: (p) => setPageIndex(p - 1),
-  });
-
-  useEffect(() => {
-    setCurrentPage(pageIndex + 1);
-  }, [pageIndex, setCurrentPage]);
+  const currentData = filteredData;
+  const currentPage = pageIndex;
 
   return (
     <div className="flex flex-col gap-10">
@@ -45,9 +36,8 @@ export default function FilterAndTableContainer({
         data={data}
         setFilteredData={(d) => {
           setFilteredData(d);
-          setPageIndex(0);
         }}
-        setCurrentPage={(p) => setPageIndex(p - 1)}
+        setCurrentPage={setPageIndex}
       />
       <CodeListTable
         data={currentData}
@@ -57,10 +47,9 @@ export default function FilterAndTableContainer({
         pageSize={pageSize}
         setPageSize={(n) => {
           setPageSize(n);
-          setPageIndex(0);
+          setPageIndex(1);
         }}
-        onPageChange={(p) => setPageIndex(p - 1)}
-        skip={(currentPage - 1) * pageSize}
+        onPageChange={setPageIndex}
         limit={pageSize}
       />
     </div>
