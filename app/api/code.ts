@@ -2,14 +2,30 @@ import { apiFetch } from "@/util/fetch";
 import { CodeCreateReq, CodeDetailRes, CodeListRes, CodeUpdateReq } from "./dto/code";
 
 // 코드 리스트 조회
-export const getCodeList = (params: { page?: number; limit?: number } = {}) =>
-  apiFetch(
-    `/codes?${new URLSearchParams({
-      page: String(params.page ?? 1),
-      limit: String(params.limit ?? 10),
-    })}`
-  ) as Promise<CodeListRes>;
+export const getCodeList = (
+  params: {
+    page?: number;
+    limit?: number;
+    keyword?: string;
+    start_date?: string;
+    end_date?: string;
+  } = {}
+) => {
+  // 기본값: 어제, 오늘
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
 
+  const qs = new URLSearchParams({
+    page: String(params.page ?? 1),
+    limit: String(params.limit ?? 10),
+    ...(params.keyword ? { keyword: params.keyword } : {}),
+    start_date: params.start_date ?? yesterday.toISOString().slice(0, 10),
+    end_date: params.end_date ?? today.toISOString().slice(0, 10),
+  });
+
+  return apiFetch(`/codes?${qs.toString()}`) as Promise<CodeListRes>;
+};
 // 코드 생성
 export const generateCodes = (data: CodeCreateReq) =>
   apiFetch("/codes/generate", {

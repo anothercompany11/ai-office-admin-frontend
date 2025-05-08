@@ -5,38 +5,19 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import formattedDate from "@/util/date";
 import { CalendarIcon } from "lucide-react";
-import { useState } from "react";
 import { DateRange } from "react-day-picker";
 
-export type searchDate = { start: Date | undefined; end: Date | undefined } | undefined;
-
 type CalendarSingleProps = {
-  date: searchDate;
-  setDate: (data: searchDate) => void;
+  date: DateRange;
+  setDate: (data: DateRange) => void;
 };
 
 const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
-  const [range, setRange] = useState<
-    | {
-        from: Date | undefined;
-        to: Date | undefined;
-      }
-    | undefined
-    | DateRange
-  >({
-    from: date?.start,
-    to: date?.end,
-  });
+  const today = new Date();
 
-  // 현재 날짜
-  const currentDate = new Date();
-
-  // 날짜 변경 핸들러
-  const onSelectRange = (newRange: undefined | DateRange) => {
+  const onSelectRange = (newRange: DateRange | undefined) => {
     if (newRange) {
-      const { from, to } = newRange;
-      setRange({ from, to });
-      setDate({ start: from, end: to });
+      setDate({ from: newRange.from, to: newRange.to });
     }
   };
 
@@ -52,7 +33,7 @@ const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
             <input
               type="text"
               readOnly
-              value={range && range.from ? formattedDate(range.from) : "연도. 월. 일"}
+              value={date && date.from ? formattedDate(date.from) : "연도. 월. 일"}
               placeholder="Start date"
               className="max-w-[80px] bg-transparent focus:outline-none"
             />
@@ -60,7 +41,7 @@ const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
             <input
               type="text"
               readOnly
-              value={range && range.to ? formattedDate(range.to) : "연도. 월. 일"}
+              value={date && date.to ? formattedDate(date.to) : "연도. 월. 일"}
               placeholder="End date"
               className="max-w-[80px] bg-transparent focus:outline-none"
             />
@@ -72,8 +53,8 @@ const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
         <Calendar
           formatters={{ formatCaption, formatWeekdayName }}
           mode="range"
-          disabled={(date) => date > currentDate} // 현재 날짜 이후는 선택 불가
-          selected={range}
+          disabled={(date) => date > today} // 현재 날짜 이후는 선택 불가
+          selected={date}
           onSelect={onSelectRange}
           initialFocus
         />
