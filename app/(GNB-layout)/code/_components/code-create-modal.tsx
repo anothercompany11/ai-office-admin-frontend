@@ -3,7 +3,6 @@ import CustomInputField from "@/app/shared/custom-input-field";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import useGenerateCodes from "@/hooks/use-create-code";
@@ -19,26 +18,29 @@ interface CodeCreateModalProps {
 
 export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
   const [open, setOpen] = useState(false);
+  const [rawCount, setRawCount] = useState(""); // 자동 생성 개수
 
   const form = useForm<CodeCreateSchema>({
     resolver: zodResolver(codeCreateSchema),
-    defaultValues: { name: "", description: "", mode: "single", count: 1 },
+    defaultValues: { name: "", description: "", mode: "single" },
     mode: "onChange",
   });
 
-  const { control, handleSubmit, watch, formState, reset } = form;
+  const { control, handleSubmit, watch, formState, reset,setValue } = form;
   const mode = watch("mode");
   const { generate, isLoading } = useGenerateCodes(skip, limit);
 
-  const onSubmit: SubmitHandler<CodeCreateSchema> = async (vals) => {
-    await generate({
-      name: vals.name,
-      description: vals.description ?? "",
-      count: vals.mode === "batch" ? vals.count! : 1,
-      mode: vals.mode,
+  const onSubmit: SubmitHandler<CodeCreateSchema> = vals => {
+    // 문자열 rawCount → 숫자로 변환
+    const count = vals.mode === "batch" 
+      ? parseInt(rawCount, 10) 
+      : 1;
+    return generate({ 
+      name: vals.name, 
+      description: vals.description ?? "", 
+      count :String(count), 
+      mode: vals.mode 
     });
-    setOpen(false);
-    reset();
   };
 
   // 모달 닫기 핸들러
@@ -99,30 +101,14 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
 
             {/* batch 모드일 때만 개수 입력 */}
             {mode === "batch" && (
-              <FormField
-                control={control}
-                name="count"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="mb-2">생성 개수</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min={1}
-                        step={1}
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        value={field.value ?? 1}
-                        onChange={(e) =>
-                          field.onChange(e.target.value === "" ? undefined : parseInt(e.target.value, 10))
-                        }
-                        placeholder="생성 개수를 입력하세요"
-                      />
-                    </FormControl>
-                    {formState.errors.count && <p className="text-xs text-red-600">{formState.errors.count.message}</p>}
-                  </FormItem>
-                )}
-              />
+              <CustomInputField
+              type="number"
+              form={form}
+              name="count"
+              placeholder="개수를 입력해주세요"
+              isValid={!formState.errors.count}
+              validText={formState.errors.count?.message}
+            />
             )}
 
             <DialogFooter className="flex justify-end gap-2">

@@ -3,31 +3,32 @@
 import { ADMIN_ACCOUNT_PAGE, CODE_PAGE, LOGIN_PAGE, PASSWORD_RESET_PAGE } from "@/constants/path";
 import { usePostLogout } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
-import { AdminAccountStorage } from "@/util/storage";
+import { AdminInfo } from "@/util/storage";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { AdminRole } from "../api/dto/auth";
 import AdminInfoBox from "./admin-info-box";
+import Loading from "./loading";
 
 interface NavMenuItem {
   label: string;
   icon: string;
-  path?: string;            
-  onClick?: () => void;     
+  path?: string;
+  onClick?: () => void;
 }
 
 interface GlobalNavBarProps {
   isCollapsed: boolean;
   onToggleCollapsed: () => void;
+  adminInfo: AdminInfo | null;
 }
 
-const GlobalNavBar = ({ isCollapsed, onToggleCollapsed }: GlobalNavBarProps) => {
+const GlobalNavBar = ({ isCollapsed, adminInfo, onToggleCollapsed }: GlobalNavBarProps) => {
   const path = usePathname();
   const router = useRouter();
   const { onSubmit } = usePostLogout();
-  const adminInfo = AdminAccountStorage.getAdminInfo();
   const isSuperAdmin = adminInfo?.role === AdminRole.SUPER_ADMIN;
 
   // 로그아웃 성공 핸들러
@@ -67,9 +68,7 @@ const GlobalNavBar = ({ isCollapsed, onToggleCollapsed }: GlobalNavBarProps) => 
     },
   ];
 
-  const authAndAccountMenu: NavMenuItem[] = isSuperAdmin
-  ? [...adminAccountMenu, ...authMenu]
-  : authMenu;
+  const authAndAccountMenu: NavMenuItem[] = isSuperAdmin ? [...adminAccountMenu, ...authMenu] : authMenu;
 
   return (
     <div
@@ -90,14 +89,7 @@ const GlobalNavBar = ({ isCollapsed, onToggleCollapsed }: GlobalNavBarProps) => 
             {isCollapsed ? <ChevronsRight className="size-6" /> : <ChevronsLeft className="size-6" />}
           </button>
         </div>
-        {!isCollapsed && (
-          <AdminInfoBox
-            admin={{
-              name: adminInfo?.name,
-              role: adminInfo?.role,
-            }}
-          />
-        )}
+        <Loading>{!isCollapsed && <AdminInfoBox adminInfo={adminInfo} />}</Loading>
 
         {/* 메뉴 리스트 */}
         <div

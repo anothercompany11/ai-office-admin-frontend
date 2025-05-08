@@ -38,7 +38,7 @@ export const RefreshTokenStorage = {
 };
 
 // 관리자 계정 정보 저장 관리
-interface AdminInfo {
+export interface AdminInfo {
   admin_id: string;
   name: string;
   role: string;
