@@ -1,6 +1,6 @@
 "use client";
 
-// import { Toaster } from "@/components/ui/toaster";
+import { AdminAccountStorage } from "@/util/storage";
 import { useState } from "react";
 import GlobalNavBar from "../shared/global-nav-bar";
 
@@ -11,15 +11,18 @@ interface GlobalNavBarLayoutProps {
 const GlobalNavBarLayout = ({ children }: GlobalNavBarLayoutProps) => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const paddingLeft = isCollapsed ? "pl-[72px]" : "pl-[280px]";
+  const adminInfo = AdminAccountStorage.getAdminInfo() || null;
 
   return (
     <>
-      <GlobalNavBar isCollapsed={isCollapsed} onToggleCollapsed={() => setIsCollapsed((prev) => !prev)} />
+      <GlobalNavBar
+        adminInfo={adminInfo}
+        isCollapsed={isCollapsed}
+        onToggleCollapsed={() => setIsCollapsed((prev) => !prev)}
+      />
       <div className={`w-screen overflow-x-hidden ${paddingLeft}`}>
         <div className="relative min-h-screen">{children}</div>
       </div>
-
-      {/* <Toaster /> */}
     </>
   );
 };

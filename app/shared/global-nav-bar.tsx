@@ -3,44 +3,50 @@
 import { ADMIN_ACCOUNT_PAGE, CODE_PAGE, LOGIN_PAGE, PASSWORD_RESET_PAGE } from "@/constants/path";
 import { usePostLogout } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
+import { AdminInfo } from "@/util/storage";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { AdminRole } from "../api/dto/auth";
 import AdminInfoBox from "./admin-info-box";
+import Loading from "./loading";
+
+interface NavMenuItem {
+  label: string;
+  icon: string;
+  path?: string;
+  onClick?: () => void;
+}
 
 interface GlobalNavBarProps {
   isCollapsed: boolean;
   onToggleCollapsed: () => void;
+  adminInfo: AdminInfo | null;
 }
 
-const GlobalNavBar = ({ isCollapsed, onToggleCollapsed }: GlobalNavBarProps) => {
+const GlobalNavBar = ({ isCollapsed, adminInfo, onToggleCollapsed }: GlobalNavBarProps) => {
   const path = usePathname();
   const router = useRouter();
   const { onSubmit } = usePostLogout();
+  const isSuperAdmin = adminInfo?.role === AdminRole.SUPER_ADMIN;
 
   // 로그아웃 성공 핸들러
   const handleSuccessLogOut = () => {
     router.replace(LOGIN_PAGE);
   };
 
-  // 메뉴 목록
-  const menuArray = [
+  // 일반 메뉴
+  const menuArray: NavMenuItem[] = [
     {
       label: "코드 관리",
       icon: "link",
-      path: CODE_PAGE, // 단일 경로(문자열)
+      path: CODE_PAGE,
     },
   ];
 
-  // 어드민 관련 메뉴
-  const adminArray = [
-    {
-      label: "관리자 계정 관리",
-      icon: "user",
-      path: ADMIN_ACCOUNT_PAGE,
-    },
+  // 인증 메뉴
+  const authMenu: NavMenuItem[] = [
     {
       label: "비밀번호 변경",
       icon: "lock",
@@ -52,6 +58,17 @@ const GlobalNavBar = ({ isCollapsed, onToggleCollapsed }: GlobalNavBarProps) => 
       onClick: () => onSubmit(handleSuccessLogOut),
     },
   ];
+
+  // 관리자 계정 메뉴
+  const adminAccountMenu: NavMenuItem[] = [
+    {
+      label: "관리자 계정 관리",
+      icon: "user",
+      path: ADMIN_ACCOUNT_PAGE,
+    },
+  ];
+
+  const authAndAccountMenu: NavMenuItem[] = isSuperAdmin ? [...adminAccountMenu, ...authMenu] : authMenu;
 
   return (
     <div
@@ -72,17 +89,7 @@ const GlobalNavBar = ({ isCollapsed, onToggleCollapsed }: GlobalNavBarProps) => 
             {isCollapsed ? <ChevronsRight className="size-6" /> : <ChevronsLeft className="size-6" />}
           </button>
         </div>
-
-        {/* isCollapsed=true → 관리자 정보 영역 숨김 */}
-        {/* todo: 이거 바꿔야함 */}
-        {!isCollapsed && (
-          <AdminInfoBox
-            admin={{
-              name: "관리자",
-              role: AdminRole.ADMIN,
-            }}
-          />
-        )}
+        <Loading>{!isCollapsed && <AdminInfoBox adminInfo={adminInfo} />}</Loading>
 
         {/* 메뉴 리스트 */}
         <div
@@ -99,63 +106,29 @@ const GlobalNavBar = ({ isCollapsed, onToggleCollapsed }: GlobalNavBarProps) => 
           >
             <div>
               {menuArray.map((menu) => {
-                // -------------------------------------
-                // 1) "단일 경로" (string)인 메뉴
-                // -------------------------------------
-                if (typeof menu.path === "string") {
-                  const isActive = path === menu.path;
-                  return (
-                    <Link
-                      prefetch={false}
-                      key={menu.path}
-                      className={cn(
-                        "flex items-center gap-3 px-3 py-4 title-s hover:underline",
-                        isActive ? "bg-label" : "",
-                        isCollapsed ? "justify-center" : ""
-                      )}
-                      href={menu.path}
-                    >
-                      <Image src={`/svg/${menu.icon}.svg`} alt={menu.label} width={24} height={24} className="-mt-px" />
-                      {/* 메뉴 닫힘 시 라벨 숨김 */}
-                      {!isCollapsed && menu.label}
-                    </Link>
-                  );
-                }
-
-                // -------------------------------------
-                // 2) "하위 메뉴" (array)인 메뉴
-                // -------------------------------------
-                else {
-                  // (a) 열려있는 경우 -> 기존에 사용하던 MenuAccordion
-                  // if (!isCollapsed) {
-                  //   return (
-                  //     <MenuAccordion
-                  //       currentPath={path}
-                  //       menu={menu as DepthMenu}
-                  //       key={menu.label}
-                  //       collapsed={isCollapsed}
-                  //     />
-                  //   );
-                  // }
-                  // (b) 접혀있는 경우 -> 새로 만든 아이콘+팝업
-                  // else {
-                  //   return (
-                  //     <CollapsedMultiLevelItem
-                  //       key={menu.label}
-                  //       icon={menu.icon}
-                  //       label={menu.label}
-                  //       subMenus={menu.path} // 하위 path 배열
-                  //       currentPath={path}
-                  //     />
-                  //   );
-                  // }
-                }
+                const isActive = path === menu.path;
+                return (
+                  <Link
+                    prefetch={false}
+                    key={menu.path}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-4 title-s hover:underline",
+                      isActive ? "bg-label" : "",
+                      isCollapsed ? "justify-center" : ""
+                    )}
+                    href={menu.path || ""}
+                  >
+                    <Image src={`/svg/${menu.icon}.svg`} alt={menu.label} width={24} height={24} className="-mt-px" />
+                    {/* 메뉴 닫힘 시 라벨 숨김 */}
+                    {!isCollapsed && menu.label}
+                  </Link>
+                );
               })}
             </div>
 
             {/* 어드민 관련 메뉴 */}
             <div>
-              {adminArray.map((menu) => {
+              {authAndAccountMenu.map((menu) => {
                 if (menu.path) {
                   const isActive = path === menu.path;
                   return (

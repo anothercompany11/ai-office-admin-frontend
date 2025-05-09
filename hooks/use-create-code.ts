@@ -16,7 +16,7 @@ export default function useGenerateCodes(skip: number, limit: number) {
         name: body.name,
         description: body.description ?? "",
         prompt_limit: 5, // 고정값
-        count: body.mode === "batch" ? body.count! : 1,
+        count: body.mode === "batch" ? Number(body.count!) : 1,
       };
       await generateCodes(payload);
 

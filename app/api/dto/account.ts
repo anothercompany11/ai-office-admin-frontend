@@ -1,3 +1,5 @@
+import { AdminRole } from "./auth";
+
 export type StatusType = "success" | "error" | "fail";
 
 export interface ResponseMeta {
@@ -26,7 +28,7 @@ export interface AdminUser {
   name: string;
   is_active: boolean;
   last_login_at: string;
-  is_super_admin: boolean;
+  role: AdminRole;
   created_at: string;
   updated_at: string;
   deleted_at: string | null;

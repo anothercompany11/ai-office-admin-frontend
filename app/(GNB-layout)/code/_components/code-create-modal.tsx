@@ -3,7 +3,6 @@ import CustomInputField from "@/app/shared/custom-input-field";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import useGenerateCodes from "@/hooks/use-create-code";
@@ -22,7 +21,12 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
 
   const form = useForm<CodeCreateSchema>({
     resolver: zodResolver(codeCreateSchema),
-    defaultValues: { name: "", description: "", mode: "single", count: 1 },
+    defaultValues: {
+      name: "",
+      description: "",
+      mode: "single",
+      count: "1",
+    },
     mode: "onChange",
   });
 
@@ -30,22 +34,22 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
   const mode = watch("mode");
   const { generate, isLoading } = useGenerateCodes(skip, limit);
 
-  const onSubmit: SubmitHandler<CodeCreateSchema> = async (vals) => {
-    await generate({
+  const onSubmit: SubmitHandler<CodeCreateSchema> = (vals) => {
+    // batch 모드면 count 사용, single 모드면 1 고정
+    const count = vals.mode === "batch" ? Number(vals.count) : 1;
+    return generate({
       name: vals.name,
       description: vals.description ?? "",
-      count: vals.mode === "batch" ? vals.count! : 1,
+      count: String(count),
       mode: vals.mode,
     });
-    setOpen(false);
-    reset();
   };
 
-  // 모달 닫기 핸들러
   const handleCloseModal = () => {
     reset();
     setOpen(false);
   };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -55,12 +59,13 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
         <DialogHeader>
           <DialogTitle>코드 생성하기</DialogTitle>
         </DialogHeader>
+
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <CustomInputField
               form={form}
               name="name"
-              placeholder="학교 이름을 입력해주세요."
+              placeholder="학교 이름을 입력하세요"
               label="학교 이름"
               isValid={!formState.errors.name}
               validText={formState.errors.name?.message}
@@ -73,7 +78,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
                 <FormItem>
                   <FormLabel className="mb-2">관리자 메모</FormLabel>
                   <FormControl>
-                    <Textarea {...field} rows={3} placeholder="관리자 메모를 입력하세요." />
+                    <Textarea {...field} rows={3} placeholder="관리자 메모를 입력하세요" />
                   </FormControl>
                 </FormItem>
               )}
@@ -97,39 +102,22 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
               )}
             />
 
-            {/* batch 모드일 때만 개수 입력 */}
             {mode === "batch" && (
-              <FormField
-                control={control}
-                name="count"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="mb-2">생성 개수</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        min={1}
-                        step={1}
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        value={field.value ?? 1}
-                        onChange={(e) =>
-                          field.onChange(e.target.value === "" ? undefined : parseInt(e.target.value, 10))
-                        }
-                        placeholder="생성 개수를 입력하세요"
-                      />
-                    </FormControl>
-                    {formState.errors.count && <p className="text-xs text-red-600">{formState.errors.count.message}</p>}
-                  </FormItem>
-                )}
+              <CustomInputField
+                type="number"
+                form={form}
+                name="count" // ← 여기서 form 에 count 를 바인딩
+                placeholder="생성 개수를 입력하세요"
+                isValid={!formState.errors.count}
+                validText={formState.errors.count?.message}
               />
             )}
 
             <DialogFooter className="flex justify-end gap-2">
-              <Button size={"lg"} onClick={handleCloseModal} type="button" variant="outline">
+              <Button size="lg" variant="outline" type="button" onClick={handleCloseModal}>
                 취소
               </Button>
-              <Button size={"lg"} type="submit" disabled={!formState.isValid || isLoading}>
+              <Button size="lg" type="submit" disabled={!formState.isValid || isLoading}>
                 {isLoading ? "생성 중…" : "생성하기"}
               </Button>
             </DialogFooter>

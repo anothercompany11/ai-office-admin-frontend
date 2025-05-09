@@ -1,36 +1,34 @@
+import CalendarSingle from "@/components/ui/calendar-single";
 import { useEffect, useState } from "react";
-
-import CalendarSingle, { searchDate } from "@/components/ui/calendar-single";
+import { DateRange } from "react-day-picker";
 import FilterName from "./filter-name";
 
 interface DurationBoxProps {
-  range: searchDate;
+  range: DateRange;
   noBottomBorder?: boolean;
-  handleFilterChange: (start?: Date, end?: Date) => void; // Updated handler type
+  handleFilterChange: (from?: Date, to?: Date) => void;
 }
 
 const DurationBox = ({ range, noBottomBorder, handleFilterChange }: DurationBoxProps) => {
-  const [date, setDate] = useState(range);
+  const [date, setDate] = useState<DateRange>(range);
 
   useEffect(() => {
-    if (range?.start && range?.end) setDate(range);
-  }, [range]);
-
-  const handleDateChange = (newDate: searchDate) => {
-    if (newDate && newDate.start && newDate.end) {
-      setDate(newDate);
-
-      const newEnd = new Date(newDate.end);
-      newEnd.setDate(newEnd.getDate() + 1);
-      handleFilterChange(newDate.start, newEnd);
-    }
-  };
+    setDate(range);
+  }, [range, range?.from, range?.to]);
 
   return (
     <div className={`flex h-[72px] ${noBottomBorder ? "border-x" : "border-x border-b"}`}>
       <FilterName name="기간검색" />
       <div className="pl-6 flex items-center">
-        <CalendarSingle date={date} setDate={handleDateChange} />
+        <CalendarSingle
+          date={date}
+          setDate={(newRange) => {
+            setDate(newRange);
+            const endPlusOne = newRange?.to ? new Date(newRange.to) : new Date();
+            endPlusOne.setDate(endPlusOne.getDate() + 1);
+            handleFilterChange(newRange?.from, endPlusOne);
+          }}
+        />
       </div>
     </div>
   );

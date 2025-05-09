@@ -82,8 +82,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, isMob }) =
     ),
     // 코드 블록 구문 강조 및 복사 버튼 처리
     code: ({ inline, children, ...props }: CodeComponentProps) => {
-      // const match = /language-(\w+)/.exec(className || "");
-      // const language = match && match[1] ? match[1] : "";
       const content = String(children).replace(/\n$/, "");
 
       // 인라인 코드 처리 - ChatGPT 스타일로 개선
@@ -193,20 +191,6 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, isMob }) =
 
   return (
     <div className="markdown prose dark:prose-invert w-full break-words dark">
-      {/* <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        rehypePlugins={[
-          rehypeRaw,
-          [
-            rehypeExternalLinks,
-            { target: "_blank", rel: ["noopener", "noreferrer"] },
-          ],
-        ]}
-        components={components}
-        skipHtml={false}
-      >
-        {content}
-      </ReactMarkdown> */}
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[
