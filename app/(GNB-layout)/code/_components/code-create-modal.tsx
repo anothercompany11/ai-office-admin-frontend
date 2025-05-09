@@ -18,20 +18,25 @@ interface CodeCreateModalProps {
 
 export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
   const [open, setOpen] = useState(false);
-  const [rawCount, setRawCount] = useState(""); // 자동 생성 개수
 
   const form = useForm<CodeCreateSchema>({
     resolver: zodResolver(codeCreateSchema),
-    defaultValues: { name: "", description: "", mode: "single" },
+    defaultValues: {
+      name: "",
+      description: "",
+      mode: "single",
+      count: "1",
+    },
     mode: "onChange",
   });
 
-  const { control, handleSubmit, watch, formState, reset, setValue } = form;
+  const { control, handleSubmit, watch, formState, reset } = form;
   const mode = watch("mode");
   const { generate, isLoading } = useGenerateCodes(skip, limit);
 
   const onSubmit: SubmitHandler<CodeCreateSchema> = (vals) => {
-    const count = vals.mode === "batch" ? parseInt(rawCount, 10) : 1;
+    // batch 모드면 count 사용, single 모드면 1 고정
+    const count = vals.mode === "batch" ? Number(vals.count) : 1;
     return generate({
       name: vals.name,
       description: vals.description ?? "",
@@ -40,11 +45,11 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
     });
   };
 
-  // 모달 닫기 핸들러
   const handleCloseModal = () => {
     reset();
     setOpen(false);
   };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -54,6 +59,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
         <DialogHeader>
           <DialogTitle>코드 생성하기</DialogTitle>
         </DialogHeader>
+
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <CustomInputField
@@ -96,12 +102,11 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
               )}
             />
 
-            {/* batch 모드일 때만 개수 입력 */}
             {mode === "batch" && (
               <CustomInputField
                 type="number"
                 form={form}
-                name="count"
+                name="count" // ← 여기서 form 에 count 를 바인딩
                 placeholder="생성 개수를 입력하세요"
                 isValid={!formState.errors.count}
                 validText={formState.errors.count?.message}
@@ -109,10 +114,10 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
             )}
 
             <DialogFooter className="flex justify-end gap-2">
-              <Button size={"lg"} onClick={handleCloseModal} type="button" variant="outline">
+              <Button size="lg" variant="outline" type="button" onClick={handleCloseModal}>
                 취소
               </Button>
-              <Button size={"lg"} type="submit" disabled={!formState.isValid || isLoading}>
+              <Button size="lg" type="submit" disabled={!formState.isValid || isLoading}>
                 {isLoading ? "생성 중…" : "생성하기"}
               </Button>
             </DialogFooter>

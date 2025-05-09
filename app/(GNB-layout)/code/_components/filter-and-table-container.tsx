@@ -1,5 +1,7 @@
 "use client";
+import { CodeStatus } from "@/app/api/code";
 import { Code } from "@/app/api/dto/code";
+import { Dispatch, SetStateAction } from "react";
 import CodeFilterAndSearchBox from "./code-filter-and-search-box";
 import { CodeListTable } from "./code-list-table";
 
@@ -17,6 +19,9 @@ interface Props {
   startDate: Date;
   endDate: Date;
   setDateRange: (s: Date | undefined, e: Date | undefined) => void;
+  // 채팅 상태
+  status: CodeStatus | null;
+  setStatus: Dispatch<SetStateAction<CodeStatus | null>>;
 }
 
 export default function FilterAndTableContainer({
@@ -27,11 +32,12 @@ export default function FilterAndTableContainer({
   setPageSize,
   totalPages,
   totalDataLength,
-
   setKeyword,
   startDate,
   endDate,
   setDateRange,
+  status,
+  setStatus,
 }: Props) {
   return (
     <div className="flex flex-col gap-10">
@@ -41,6 +47,8 @@ export default function FilterAndTableContainer({
         endDate={endDate}
         setDateRange={setDateRange}
         setCurrentPage={setPageIndex}
+        status={status}
+        setStatus={setStatus}
       />
       <CodeListTable
         data={data}

@@ -1,4 +1,5 @@
 "use client";
+import { CodeStatus } from "@/app/api/code";
 import useGetCodeList from "@/hooks/use-get-code-list";
 import { useState } from "react";
 import FilterAndTableContainer from "./filter-and-table-container";
@@ -15,8 +16,9 @@ export default function CodeListContainer() {
   const [keyword, setKeyword] = useState("");
   const [startDate, setStartDate] = useState<string>(yesterdayForString);
   const [endDate, setEndDate] = useState<string>(todayForString);
+  const [status, setStatus] = useState<CodeStatus | null>(null);
 
-  const res = useGetCodeList(pageIndex, pageSize, keyword, startDate, endDate);
+  const res = useGetCodeList(pageIndex, pageSize, keyword, startDate, endDate, status);
   if (!res?.data) return null;
 
   return (
@@ -45,6 +47,9 @@ export default function CodeListContainer() {
           setEndDate(e?.toISOString().slice(0, 10) || todayForString);
           setPageIndex(1);
         }}
+        // 채팅 상태
+        status={status}
+        setStatus={setStatus}
       />
     </div>
   );

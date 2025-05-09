@@ -1,12 +1,20 @@
+import { CodeStatus } from "@/app/api/code";
 import DurationBox from "@/app/shared/duration-box";
 import SearchBar from "@/app/shared/search-bar";
+import { Dispatch, SetStateAction } from "react";
+import CodeStatusRadioBox from "./code-status-radio-box";
 
 interface CodeFilterAndSearchBoxProps {
+  // 키워드
   setKeyword: (k: string) => void;
+  // 날짜
   startDate: Date;
   endDate: Date;
   setDateRange: (s: Date | undefined, e: Date | undefined) => void;
   setCurrentPage: (p: number) => void;
+  // 코드 상태
+  status: CodeStatus | null;
+  setStatus: Dispatch<SetStateAction<CodeStatus | null>>;
 }
 
 const CodeFilterAndSearchBox = ({
@@ -15,6 +23,8 @@ const CodeFilterAndSearchBox = ({
   endDate,
   setDateRange,
   setCurrentPage,
+  status,
+  setStatus,
 }: CodeFilterAndSearchBoxProps) => {
   // 초기화 버튼 핸들러
   const handleReset = () => {
@@ -25,6 +35,7 @@ const CodeFilterAndSearchBox = ({
     setKeyword("");
     setDateRange(yesterday, today);
     setCurrentPage(1);
+    setStatus(null);
   };
   return (
     <div className="w-full min-w-[900px]">
@@ -43,7 +54,7 @@ const CodeFilterAndSearchBox = ({
           setCurrentPage(1);
         }}
       />
-      {/* <CodeStatusRadioBox chatStatus={chatStatus} setChatStatus={setChatStatus} /> */}
+      <CodeStatusRadioBox status={status} setStatus={setStatus} />
     </div>
   );
 };
