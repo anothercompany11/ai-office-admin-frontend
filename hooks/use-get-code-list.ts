@@ -1,5 +1,6 @@
 "use client";
-import { CodeStatus, getCodeList } from "@/app/api/code";
+import { getCodeList } from "@/app/api/code";
+import { CodeStatus } from "@/app/api/dto/code";
 import useSWR from "swr";
 
 export default function useGetCodeList(
@@ -11,14 +12,20 @@ export default function useGetCodeList(
   status: CodeStatus | null = null
 ) {
   const key = ["/codes", page, limit, keyword, start_date, end_date, status] as const;
-  return useSWR(key, () =>
-    getCodeList({
-      page,
-      limit,
-      ...(keyword ? { keyword } : {}),
-      ...(start_date ? { start_date } : {}),
-      ...(end_date ? { end_date } : {}),
-      status,
-    })
+  return useSWR(
+    key,
+    () =>
+      getCodeList({
+        page,
+        limit,
+        ...(keyword ? { keyword } : {}),
+        ...(start_date ? { start_date } : {}),
+        ...(end_date ? { end_date } : {}),
+        status,
+      }),
+    {
+      suspense: true,
+      keepPreviousData: true,
+    }
   ).data;
 }

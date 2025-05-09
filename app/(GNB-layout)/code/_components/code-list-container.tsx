@@ -1,56 +1,52 @@
 "use client";
-import { CodeStatus } from "@/app/api/code";
-import useGetCodeList from "@/hooks/use-get-code-list";
+import { CodeStatus } from "@/app/api/dto/code";
+import Loading from "@/app/shared/loading";
 import { useState } from "react";
-import FilterAndTableContainer from "./filter-and-table-container";
+import CodeFilterAndSearchBox from "./code-filter-and-search-box";
+import { CodeListTable } from "./code-list-table";
 
 export default function CodeListContainer() {
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-  const yesterdayForString = yesterday.toISOString().slice(0, 10);
-  const todayForString = today.toISOString().slice(0, 10);
-
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [keyword, setKeyword] = useState("");
-  const [startDate, setStartDate] = useState<string>(yesterdayForString);
-  const [endDate, setEndDate] = useState<string>(todayForString);
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
   const [status, setStatus] = useState<CodeStatus | null>(null);
-
-  const res = useGetCodeList(pageIndex, pageSize, keyword, startDate, endDate, status);
-  if (!res?.data) return null;
 
   return (
     <div className="overflow-x-auto">
-      <FilterAndTableContainer
-        data={res.data}
-        pageIndex={pageIndex}
-        setPageIndex={setPageIndex}
-        pageSize={pageSize}
-        setPageSize={(n) => {
-          setPageSize(n);
-          setPageIndex(1);
-        }}
-        totalPages={res.meta?.total_pages || 0}
-        totalDataLength={res.meta?.total || 0}
-        // 검색 키워드
-        setKeyword={(k) => {
-          setKeyword(k);
-          setPageIndex(1);
-        }}
-        // 검색 날짜
-        startDate={new Date(startDate)}
-        endDate={new Date(endDate)}
-        setDateRange={(s: Date | undefined, e: Date | undefined) => {
-          setStartDate(s?.toISOString().slice(0, 10) || yesterdayForString);
-          setEndDate(e?.toISOString().slice(0, 10) || todayForString);
-          setPageIndex(1);
-        }}
-        // 채팅 상태
-        status={status}
-        setStatus={setStatus}
-      />
+      <div className="flex flex-col gap-10">
+        <CodeFilterAndSearchBox
+          setKeyword={setKeyword}
+          startDate={startDate}
+          endDate={endDate}
+          setDateRange={(s?: Date, e?: Date) => {
+            setStartDate(s);
+            setEndDate(e);
+            setPageIndex(1);
+          }}
+          setCurrentPage={setPageIndex}
+          status={status}
+          setStatus={setStatus}
+        />
+        <Loading>
+          <CodeListTable
+            pageIndex={pageIndex}
+            currentPage={pageIndex}
+            pageSize={pageSize}
+            setPageSize={(n) => {
+              setPageSize(n);
+              setPageIndex(1);
+            }}
+            onPageChange={setPageIndex}
+            limit={pageSize}
+            keyword={keyword}
+            startDate={startDate}
+            endDate={endDate}
+            status={status}
+          />
+        </Loading>
+      </div>
     </div>
   );
 }

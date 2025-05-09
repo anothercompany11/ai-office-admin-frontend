@@ -1,4 +1,4 @@
-import { CodeStatus } from "@/app/api/code";
+import { CodeStatus } from "@/app/api/dto/code";
 import FilterName from "@/app/shared/filter-name";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Dispatch, SetStateAction } from "react";

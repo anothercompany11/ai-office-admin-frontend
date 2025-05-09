@@ -1,4 +1,4 @@
-import { CodeStatus } from "@/app/api/code";
+import { CodeStatus } from "@/app/api/dto/code";
 import DurationBox from "@/app/shared/duration-box";
 import SearchBar from "@/app/shared/search-bar";
 import { Dispatch, SetStateAction } from "react";
@@ -8,8 +8,8 @@ interface CodeFilterAndSearchBoxProps {
   // 키워드
   setKeyword: (k: string) => void;
   // 날짜
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
   setDateRange: (s: Date | undefined, e: Date | undefined) => void;
   setCurrentPage: (p: number) => void;
   // 코드 상태
@@ -28,12 +28,8 @@ const CodeFilterAndSearchBox = ({
 }: CodeFilterAndSearchBoxProps) => {
   // 초기화 버튼 핸들러
   const handleReset = () => {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
     setKeyword("");
-    setDateRange(yesterday, today);
+    setDateRange(undefined, undefined);
     setCurrentPage(1);
     setStatus(null);
   };

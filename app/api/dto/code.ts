@@ -35,6 +35,12 @@ export interface Code {
   prompt_count: number;
 }
 
+// 코드 상태
+export enum CodeStatus {
+  AVAILABLE = "available",
+  UNAVAILABLE = "unavailable",
+}
+
 // 코드 리스트 조회 응답
 export interface CodeListRes {
   status: StatusType;

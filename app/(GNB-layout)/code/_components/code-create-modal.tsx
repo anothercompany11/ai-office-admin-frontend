@@ -34,20 +34,24 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
   const mode = watch("mode");
   const { generate, isLoading } = useGenerateCodes(skip, limit);
 
-  const onSubmit: SubmitHandler<CodeCreateSchema> = (vals) => {
-    // batch 모드면 count 사용, single 모드면 1 고정
-    const count = vals.mode === "batch" ? Number(vals.count) : 1;
-    return generate({
-      name: vals.name,
-      description: vals.description ?? "",
-      count: String(count),
-      mode: vals.mode,
-    });
-  };
-
+  // 모달창 닫기 핸들러
   const handleCloseModal = () => {
     reset();
     setOpen(false);
+  };
+
+  const onSubmit: SubmitHandler<CodeCreateSchema> = (vals) => {
+    // batch 모드면 count 사용, single 모드면 1 고정
+    const count = vals.mode === "batch" ? Number(vals.count) : 1;
+    return generate(
+      {
+        name: vals.name,
+        description: vals.description ?? "",
+        count: String(count),
+        mode: vals.mode,
+      },
+      handleCloseModal
+    );
   };
 
   return (
@@ -117,8 +121,8 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
               <Button size="lg" variant="outline" type="button" onClick={handleCloseModal}>
                 취소
               </Button>
-              <Button size="lg" type="submit" disabled={!formState.isValid || isLoading}>
-                {isLoading ? "생성 중…" : "생성하기"}
+              <Button loading={isLoading} size="lg" type="submit" disabled={!formState.isValid}>
+                생성하기
               </Button>
             </DialogFooter>
           </form>
