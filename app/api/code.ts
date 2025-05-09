@@ -1,10 +1,5 @@
 import { apiFetch } from "@/util/fetch";
-import { CodeCreateReq, CodeDetailRes, CodeListRes, CodeUpdateReq } from "./dto/code";
-
-export enum CodeStatus {
-  AVAILABLE = "available",
-  UNAVAILABLE = "unavailable",
-}
+import { CodeCreateReq, CodeDetailRes, CodeListRes, CodeStatus, CodeUpdateReq } from "./dto/code";
 
 // 코드 리스트 조회
 export const getCodeList = (
@@ -17,32 +12,27 @@ export const getCodeList = (
     status?: CodeStatus | null;
   } = {}
 ) => {
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-
-  // params 디폴트 해체 할당
   const { page = 1, limit = 10, keyword, start_date, end_date, status = null } = params;
 
   const query: Record<string, string> = {
     page: String(page),
     limit: String(limit),
-    start_date: start_date ?? yesterday.toISOString().slice(0, 10),
-    end_date: end_date ?? today.toISOString().slice(0, 10),
   };
 
-  // 키워드가 있을 때만 전달
   if (keyword) {
     query.keyword = keyword;
   }
-
-  // status가 null 이 아닐 때만 전달
+  if (start_date) {
+    query.start_date = start_date;
+  }
+  if (end_date) {
+    query.end_date = end_date;
+  }
   if (status !== null) {
     query.status = status;
   }
 
   const qs = new URLSearchParams(query);
-
   return apiFetch(`/codes?${qs.toString()}`) as Promise<CodeListRes>;
 };
 

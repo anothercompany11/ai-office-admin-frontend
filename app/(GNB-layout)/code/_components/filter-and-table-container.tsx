@@ -1,6 +1,6 @@
 "use client";
-import { CodeStatus } from "@/app/api/code";
-import { Code } from "@/app/api/dto/code";
+
+import { Code, CodeStatus } from "@/app/api/dto/code";
 import { Dispatch, SetStateAction } from "react";
 import CodeFilterAndSearchBox from "./code-filter-and-search-box";
 import { CodeListTable } from "./code-list-table";

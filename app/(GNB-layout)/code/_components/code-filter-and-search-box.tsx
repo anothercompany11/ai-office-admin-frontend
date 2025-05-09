@@ -1,4 +1,4 @@
-import { CodeStatus } from "@/app/api/code";
+import { CodeStatus } from "@/app/api/dto/code";
 import DurationBox from "@/app/shared/duration-box";
 import SearchBar from "@/app/shared/search-bar";
 import { Dispatch, SetStateAction } from "react";

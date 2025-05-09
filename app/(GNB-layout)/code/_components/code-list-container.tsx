@@ -1,5 +1,5 @@
 "use client";
-import { CodeStatus } from "@/app/api/code";
+import { CodeStatus } from "@/app/api/dto/code";
 import useGetCodeList from "@/hooks/use-get-code-list";
 import { useState } from "react";
 import FilterAndTableContainer from "./filter-and-table-container";

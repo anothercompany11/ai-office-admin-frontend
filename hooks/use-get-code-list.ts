@@ -1,5 +1,6 @@
 "use client";
-import { CodeStatus, getCodeList } from "@/app/api/code";
+import { getCodeList } from "@/app/api/code";
+import { CodeStatus } from "@/app/api/dto/code";
 import useSWR from "swr";
 
 export default function useGetCodeList(
