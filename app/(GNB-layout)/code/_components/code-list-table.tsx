@@ -1,9 +1,11 @@
-import { Code } from "@/app/api/dto/code";
+"use client";
+import { Code, CodeStatus } from "@/app/api/dto/code";
 import { SelectBox } from "@/app/shared/select-box";
 import TableSummaryText from "@/app/shared/table-summary-text";
 import { Checkbox } from "@/components/ui/checkbox";
 import Pagination from "@/components/ui/pagination";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import useGetCodeList from "@/hooks/use-get-code-list";
 import { cn } from "@/lib/utils";
 import formattedDate from "@/util/date";
 import {
@@ -18,28 +20,42 @@ import * as React from "react";
 import CTAButtonBox from "./cta-button-box";
 
 type Props = {
-  data: Code[];
   currentPage: number;
-  totalPages: number;
-  totalDataLength: number;
   pageSize: number;
   setPageSize: (n: number) => void;
   onPageChange: (p: number) => void;
   limit: number;
+  keyword: string;
+  pageIndex: number;
+  startDate?: Date;
+  endDate?: Date;
+  status: CodeStatus | null;
 };
 
 export function CodeListTable({
-  data,
   currentPage,
-  totalPages,
-  totalDataLength,
   pageSize,
   setPageSize,
   onPageChange,
   limit,
+  keyword,
+  startDate,
+  endDate,
+  pageIndex,
+  status,
 }: Props) {
+  const res = useGetCodeList(
+    pageIndex,
+    pageSize,
+    keyword,
+    startDate ? startDate.toISOString().slice(0, 10) : undefined,
+    endDate ? endDate.toISOString().slice(0, 10) : undefined,
+    status
+  );
   const columnHelper = createColumnHelper<Code>();
   const [rowSelection, setRowSelection] = React.useState({});
+
+  const data = res?.data || [];
 
   const columns = [
     columnHelper.display({
@@ -114,7 +130,7 @@ export function CodeListTable({
       onPageChange(nextZero + 1);
     },
     manualPagination: true,
-    pageCount: totalPages,
+    pageCount: res.meta?.total_pages || 0,
   });
 
   const selectedIds = table.getSelectedRowModel().rows.map((r) => r.original.id);
@@ -128,7 +144,7 @@ export function CodeListTable({
     <div className="flex flex-col min-w-[900px] gap-4 overflow-x-auto">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <TableSummaryText currentDataLen={data.length} totalDataLen={totalDataLength} />
+          <TableSummaryText currentDataLen={data.length} totalDataLen={res?.meta?.total || 0} />
           <SelectBox
             value={String(pageSize)}
             onChange={(val) => setPageSize(Number(val))}
@@ -195,7 +211,7 @@ export function CodeListTable({
         </TableBody>
       </Table>
 
-      <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
+      <Pagination currentPage={currentPage} totalPages={res?.meta?.total_pages || 0} onPageChange={onPageChange} />
     </div>
   );
 }

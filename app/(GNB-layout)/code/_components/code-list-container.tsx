@@ -1,8 +1,9 @@
 "use client";
 import { CodeStatus } from "@/app/api/dto/code";
-import useGetCodeList from "@/hooks/use-get-code-list";
+import Loading from "@/app/shared/loading";
 import { useState } from "react";
-import FilterAndTableContainer from "./filter-and-table-container";
+import CodeFilterAndSearchBox from "./code-filter-and-search-box";
+import { CodeListTable } from "./code-list-table";
 
 export default function CodeListContainer() {
   const [pageIndex, setPageIndex] = useState(1);
@@ -12,46 +13,40 @@ export default function CodeListContainer() {
   const [endDate, setEndDate] = useState<Date | undefined>();
   const [status, setStatus] = useState<CodeStatus | null>(null);
 
-  const res = useGetCodeList(
-    pageIndex,
-    pageSize,
-    keyword,
-    startDate ? startDate.toISOString().slice(0, 10) : undefined,
-    endDate ? endDate.toISOString().slice(0, 10) : undefined,
-    status
-  );
-  if (!res?.data) return null;
-
   return (
     <div className="overflow-x-auto">
-      <FilterAndTableContainer
-        data={res.data}
-        pageIndex={pageIndex}
-        setPageIndex={setPageIndex}
-        pageSize={pageSize}
-        setPageSize={(n) => {
-          setPageSize(n);
-          setPageIndex(1);
-        }}
-        totalPages={res.meta?.total_pages || 0}
-        totalDataLength={res.meta?.total || 0}
-        // 검색 키워드
-        setKeyword={(k) => {
-          setKeyword(k);
-          setPageIndex(1);
-        }}
-        // 검색 날짜
-        startDate={startDate}
-        endDate={endDate}
-        setDateRange={(s?: Date, e?: Date) => {
-          setStartDate(s);
-          setEndDate(e);
-          setPageIndex(1);
-        }}
-        // 채팅 상태
-        status={status}
-        setStatus={setStatus}
-      />
+      <div className="flex flex-col gap-10">
+        <CodeFilterAndSearchBox
+          setKeyword={setKeyword}
+          startDate={startDate}
+          endDate={endDate}
+          setDateRange={(s?: Date, e?: Date) => {
+            setStartDate(s);
+            setEndDate(e);
+            setPageIndex(1);
+          }}
+          setCurrentPage={setPageIndex}
+          status={status}
+          setStatus={setStatus}
+        />
+        <Loading>
+          <CodeListTable
+            pageIndex={pageIndex}
+            currentPage={pageIndex}
+            pageSize={pageSize}
+            setPageSize={(n) => {
+              setPageSize(n);
+              setPageIndex(1);
+            }}
+            onPageChange={setPageIndex}
+            limit={pageSize}
+            keyword={keyword}
+            startDate={startDate}
+            endDate={endDate}
+            status={status}
+          />
+        </Loading>
+      </div>
     </div>
   );
 }
