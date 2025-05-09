@@ -28,12 +28,8 @@ const CodeFilterAndSearchBox = ({
 }: CodeFilterAndSearchBoxProps) => {
   // 초기화 버튼 핸들러
   const handleReset = () => {
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(today.getDate() - 1);
-
     setKeyword("");
-    setDateRange(yesterday, today);
+    setDateRange(undefined, undefined);
     setCurrentPage(1);
     setStatus(null);
   };

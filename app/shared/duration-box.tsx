@@ -24,9 +24,7 @@ const DurationBox = ({ range, noBottomBorder, handleFilterChange }: DurationBoxP
           date={date}
           setDate={(newRange) => {
             setDate(newRange);
-            const endPlusOne = newRange?.to ? new Date(newRange.to) : new Date();
-            endPlusOne.setDate(endPlusOne.getDate() + 1);
-            handleFilterChange(newRange?.from, endPlusOne);
+            handleFilterChange(newRange?.from, newRange?.to);
           }}
         />
       </div>

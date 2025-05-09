@@ -21,31 +21,23 @@ const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
     }
   };
 
+  // 캘린더 표시 문구
+  let displayText = "날짜 선택";
+  if (date.from && date.to) {
+    displayText = `${formattedDate(date.from)} ~ ${formattedDate(date.to)}`;
+  } else if (date.from) {
+    displayText = formattedDate(date.from);
+  } else if (date.to) {
+    displayText = formattedDate(date.to);
+  }
+
   return (
     <Popover>
       <PopoverTrigger asChild>
         <button
-          className={cn(
-            "w-[250px] p-3 rounded-sm border relative text-[15px] max-h-12 items-center justify-between text-left"
-          )}
+          className={cn("w-[250px] relative py-3 px-4 rounded-sm border flex items-center justify-between text-[15px]")}
         >
-          <span className="flex gap-3 subtitle-3">
-            <input
-              type="text"
-              readOnly
-              value={date && date.from ? formattedDate(date.from) : "연도. 월. 일"}
-              placeholder="Start date"
-              className="max-w-[80px] bg-transparent focus:outline-none"
-            />
-            <span>~</span>
-            <input
-              type="text"
-              readOnly
-              value={date && date.to ? formattedDate(date.to) : "연도. 월. 일"}
-              placeholder="End date"
-              className="max-w-[80px] bg-transparent focus:outline-none"
-            />
-          </span>
+          <span className="text-body-m text-label-alternative">{displayText}</span>
           <CalendarIcon className="absolute inset-y-0 right-0 my-auto ml-auto mr-3 size-[19px] text-black" />
         </button>
       </PopoverTrigger>
@@ -53,7 +45,7 @@ const CalendarSingle = ({ date, setDate }: CalendarSingleProps) => {
         <Calendar
           formatters={{ formatCaption, formatWeekdayName }}
           mode="range"
-          disabled={(date) => date > today} // 현재 날짜 이후는 선택 불가
+          disabled={(date) => date > today}
           selected={date}
           onSelect={onSelectRange}
           initialFocus
