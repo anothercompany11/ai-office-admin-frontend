@@ -16,9 +16,9 @@ interface Props {
 
   // 날짜 관련
   setKeyword: (k: string) => void;
-  startDate: Date;
-  endDate: Date;
-  setDateRange: (s: Date | undefined, e: Date | undefined) => void;
+  startDate?: Date;
+  endDate?: Date;
+  setDateRange: (s?: Date, e?: Date) => void;
   // 채팅 상태
   status: CodeStatus | null;
   setStatus: Dispatch<SetStateAction<CodeStatus | null>>;

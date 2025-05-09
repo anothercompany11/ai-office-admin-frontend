@@ -8,8 +8,8 @@ interface CodeFilterAndSearchBoxProps {
   // 키워드
   setKeyword: (k: string) => void;
   // 날짜
-  startDate: Date;
-  endDate: Date;
+  startDate?: Date;
+  endDate?: Date;
   setDateRange: (s: Date | undefined, e: Date | undefined) => void;
   setCurrentPage: (p: number) => void;
   // 코드 상태

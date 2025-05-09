@@ -5,20 +5,21 @@ import { useState } from "react";
 import FilterAndTableContainer from "./filter-and-table-container";
 
 export default function CodeListContainer() {
-  const today = new Date();
-  const yesterday = new Date(today);
-  yesterday.setDate(today.getDate() - 1);
-  const yesterdayForString = yesterday.toISOString().slice(0, 10);
-  const todayForString = today.toISOString().slice(0, 10);
-
   const [pageIndex, setPageIndex] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [keyword, setKeyword] = useState("");
-  const [startDate, setStartDate] = useState<string>(yesterdayForString);
-  const [endDate, setEndDate] = useState<string>(todayForString);
+  const [startDate, setStartDate] = useState<Date | undefined>();
+  const [endDate, setEndDate] = useState<Date | undefined>();
   const [status, setStatus] = useState<CodeStatus | null>(null);
 
-  const res = useGetCodeList(pageIndex, pageSize, keyword, startDate, endDate, status);
+  const res = useGetCodeList(
+    pageIndex,
+    pageSize,
+    keyword,
+    startDate ? startDate.toISOString().slice(0, 10) : undefined,
+    endDate ? endDate.toISOString().slice(0, 10) : undefined,
+    status
+  );
   if (!res?.data) return null;
 
   return (
@@ -40,11 +41,11 @@ export default function CodeListContainer() {
           setPageIndex(1);
         }}
         // 검색 날짜
-        startDate={new Date(startDate)}
-        endDate={new Date(endDate)}
-        setDateRange={(s: Date | undefined, e: Date | undefined) => {
-          setStartDate(s?.toISOString().slice(0, 10) || yesterdayForString);
-          setEndDate(e?.toISOString().slice(0, 10) || todayForString);
+        startDate={startDate}
+        endDate={endDate}
+        setDateRange={(s?: Date, e?: Date) => {
+          setStartDate(s);
+          setEndDate(e);
           setPageIndex(1);
         }}
         // 채팅 상태
