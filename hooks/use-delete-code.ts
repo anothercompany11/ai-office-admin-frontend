@@ -14,7 +14,20 @@ export default function useDeleteCodes(skip: number, limit: number, onSuccess?: 
     setError(null);
     try {
       await deleteCodes(ids);
+
+      // 기본 키 (페이지, 리밋만 있는 경우)
       await mutate(["/codes", skip, limit]);
+
+      // useGetCodeList에서 사용하는 전체 키 패턴에 대해 리페칭
+      // 현재 표시 중인 모든 필터 조합에 대해 데이터 갱신
+      await mutate((key) => {
+        // key가 배열이고 첫 번째 요소가 "/codes"인 경우에만 리페칭
+        if (Array.isArray(key) && key[0] === "/codes") {
+          return true;
+        }
+        return false;
+      });
+
       if (onSuccess) {
         onSuccess();
       }
