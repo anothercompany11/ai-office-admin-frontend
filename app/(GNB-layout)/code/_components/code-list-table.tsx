@@ -48,8 +48,8 @@ export function CodeListTable({
     pageIndex,
     pageSize,
     keyword,
-    startDate ? startDate.toISOString().slice(0, 10) : undefined,
-    endDate ? endDate.toISOString().slice(0, 10) : undefined,
+    startDate ? formatDateForAPI(startDate) : undefined,
+    endDate ? formatDateForAPI(endDate) : undefined,
     status
   );
   const columnHelper = createColumnHelper<Code>();
@@ -214,4 +214,12 @@ export function CodeListTable({
       <Pagination currentPage={currentPage} totalPages={res?.meta?.total_pages || 0} onPageChange={onPageChange} />
     </div>
   );
+}
+
+// 로컬 시간대를 유지하는 날짜 포맷 함수
+function formatDateForAPI(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
