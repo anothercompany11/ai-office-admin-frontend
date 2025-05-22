@@ -2,9 +2,8 @@
 import CustomInputField from "@/app/shared/custom-input-field";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Textarea } from "@/components/ui/textarea";
 import useGenerateCodes from "@/hooks/use-create-code";
 import { codeCreateSchema, CodeCreateSchema } from "@/schema/code";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +25,10 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
       description: "",
       mode: "single",
       count: "1",
+      initials: null,
+      grade: null,
+      class_number: null,
+      start_number: "1",
     },
     mode: "onChange",
   });
@@ -48,7 +51,11 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
         name: vals.name,
         description: vals.description ?? "",
         count: String(count),
+        initials: vals.initials,
+        grade: vals.grade,
+        class_number: vals.class_number,
         mode: vals.mode,
+        start_number: vals.start_number,
       },
       handleCloseModal
     );
@@ -62,6 +69,10 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>코드 생성하기</DialogTitle>
+          <p className="bg-primary p-3 rounded-sm text-white text-subtitle-m">
+            <span>학년 / 반 / 영문 약자 미입력 시 </span>
+            <span className="text-title-m">코드 랜덤 생성</span>
+          </p>
         </DialogHeader>
 
         <Form {...form}>
@@ -74,7 +85,42 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
               isValid={!formState.errors.name}
               validText={formState.errors.name?.message}
             />
+            <CustomInputField
+              form={form}
+              name="initials"
+              placeholder="영문 약자(3자리)를 입력하세요"
+              label="영문 약자"
+              isValid={!formState.errors.initials}
+              validText={formState.errors.initials?.message}
+            />
 
+            <CustomInputField
+              form={form}
+              name="grade"
+              placeholder="학년을 입력하세요"
+              label="학년"
+              isValid={!formState.errors.grade}
+              validText={formState.errors.grade?.message}
+            />
+            <CustomInputField
+              form={form}
+              name="class_number"
+              placeholder="반을 입력하세요"
+              label="반"
+              isValid={!formState.errors.class_number}
+              validText={formState.errors.class_number?.message}
+            />
+            <CustomInputField
+              form={form}
+              name="start_number"
+              placeholder="시작 번호를 입력하세요"
+              label="시작 번호"
+              isValid={!formState.errors.start_number}
+              validText={formState.errors.start_number?.message}
+            />
+
+            {/* 관리자 메모 임시 주석 처리 */}
+            {/* 
             <FormField
               control={control}
               name="description"
@@ -86,7 +132,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
                   </FormControl>
                 </FormItem>
               )}
-            />
+            /> */}
 
             <FormField
               control={control}
@@ -110,7 +156,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
               <CustomInputField
                 type="number"
                 form={form}
-                name="count" // ← 여기서 form 에 count 를 바인딩
+                name="count"
                 placeholder="생성 개수를 입력하세요"
                 isValid={!formState.errors.count}
                 validText={formState.errors.count?.message}
