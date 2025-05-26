@@ -55,8 +55,11 @@ export interface CodeListRes {
 export interface CodeCreateReq {
   name: string; // 학교명
   description: string; // 설명
-  prompt_limit: number; // 대화 요청 가능 횟수
   count: number; // 생성할 개수
+  initials: string | null; // 영문 약자
+  grade: string | null; // 학년
+  class_number: string | null; // 반
+  start_number: number; // 시작 번호
 }
 
 // 메시지

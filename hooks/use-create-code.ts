@@ -18,7 +18,10 @@ export default function useGenerateCodes(skip: number, limit: number) {
       const payload: CodeCreateReq = {
         name: body.name,
         description: body.description ?? "",
-        prompt_limit: 5, // 고정값
+        initials: body.initials ?? null,
+        grade: body.grade ?? null,
+        class_number: body.class_number ?? null,
+        start_number: Number(body.start_number) ?? 1,
         count: body.mode === "batch" ? Number(body.count!) : 1,
       };
       await generateCodes(payload);
@@ -41,8 +44,9 @@ export default function useGenerateCodes(skip: number, limit: number) {
       onSuccess();
       toast("코드 생성 성공");
     } catch (err: unknown) {
+      const errorObj = JSON.parse((err as Error).message);
       setError(err);
-      toast("코드 생성 실패", { description: "잠시 후 다시 시도해주세요" });
+      toast("코드 생성 실패", { description: errorObj.message || "잠시 후 다시 시도해주세요" });
     } finally {
       setIsLoading(false);
     }
