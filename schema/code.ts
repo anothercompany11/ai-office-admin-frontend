@@ -9,8 +9,8 @@ export const codeCreateSchema = z
     count: z.string().min(1, { message: "1 이상 입력해주세요." }).optional(),
     initials: z
       .string()
-      .length(3, { message: "이니셜은 3글자의 영문이어야 합니다." })
-      .regex(/^[a-zA-Z]+$/, { message: "이니셜은 3글자의 영문이어야 합니다." })
+      .length(2, { message: "이니셜은 2글자의 영문이어야 합니다." })
+      .regex(/^[a-zA-Z]+$/, { message: "이니셜은 2글자의 영문이어야 합니다." })
       .nullable()
       .optional(),
     grade: z

@@ -88,8 +88,9 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
             <CustomInputField
               form={form}
               name="initials"
-              placeholder="영문 약자(3자리)를 입력하세요"
+              placeholder="영문 약자(2자리)를 입력하세요"
               label="영문 약자"
+              maxLength={2}
               isValid={!formState.errors.initials}
               validText={formState.errors.initials?.message}
             />
