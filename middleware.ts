@@ -11,9 +11,11 @@ export function middleware(req: NextRequest) {
 
   // 나머지는 전부 보호 → refresh_token 쿠키 체크
   const hasRefresh = req.cookies.get("refresh_token");
-
+  console.log("hasRefresh", hasRefresh);
   if (process.env.NODE_ENV !== "development") {
+    console.log("여기로 들어옴");
     if (!hasRefresh) {
+      console.log("리프레쉬 없음");
       return NextResponse.redirect(new URL("/login", req.url));
     }
   }
