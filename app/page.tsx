@@ -1,6 +1,23 @@
-import { CODE_PAGE } from "@/constants/path";
-import { redirect } from "next/navigation";
+"use client";
+
+import { useAuthStore } from "@/stores/auth-store";
+import { CSRFTokenStorage } from "@/util/storage";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Home() {
-  redirect(CODE_PAGE);
+  const router = useRouter();
+  const { accessToken } = useAuthStore();
+
+  useEffect(() => {
+    const csrfToken = CSRFTokenStorage.getToken();
+
+    if (accessToken && csrfToken) {
+      router.replace("/code");
+    } else {
+      router.replace("/login");
+    }
+  }, [accessToken, router]);
+
+  return null;
 }
