@@ -2,7 +2,7 @@ import { Conversation } from "@/app/api/dto/code";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
-import MarkdownRenderer from "./markdown-renderer";
+import MarkdownRenderer from "@/app/shared/markdown-renderer";
 
 interface ConversationSectionProps {
   conversations: Conversation[];
