@@ -29,7 +29,7 @@ export default function SpecListTable({
   const res = useGetSpecList(currentPage, pageSize, keyword);
   const data: SpecSummary[] = res?.data || [];
 
-  // 열람 중인 명세
+  // 열람 중인 결과물
   const [openedSpecId, setOpenedSpecId] = useState<string | null>(null);
 
   return (
@@ -48,7 +48,7 @@ export default function SpecListTable({
           <TableRow>
             <TableHead className="border-x w-[140px]">생성 코드</TableHead>
             <TableHead className="border-r w-[180px] min-w-[160px]">학교 이름</TableHead>
-            <TableHead className="border-r min-w-[200px]">명세 제목</TableHead>
+            <TableHead className="border-r min-w-[200px]">결과물 제목</TableHead>
             <TableHead className="border-r w-[90px]">버전</TableHead>
             <TableHead className="border-r w-[110px]">기획 충족</TableHead>
             <TableHead className="border-r w-[110px]">본문 길이</TableHead>
@@ -69,19 +69,27 @@ export default function SpecListTable({
                   <TableCell className={border()}>{spec.school_name?.trim() || "-"}</TableCell>
                   <TableCell className={border()}>
                     <p>{spec.title?.trim() || "-"}</p>
-                    {spec.conversation_title && (
-                      <p className="text-body-2 text-label-alternative">{spec.conversation_title}</p>
+                    {/* 되말한 목표가 있으면 그것을 보여준다. 대화 제목은 첫 메시지에서 자동으로 붙은 것이다 */}
+                    {(spec.goal?.trim() || spec.conversation_title) && (
+                      <p className="text-body-2 text-label-alternative">
+                        {spec.goal?.trim() || spec.conversation_title}
+                      </p>
                     )}
                   </TableCell>
                   <TableCell className={border()}>v{spec.version}</TableCell>
                   <TableCell className={border()}>
-                    <p
-                      className={
-                        spec.coverage_filled < spec.coverage_total ? "text-status-error" : "text-label-strong"
-                      }
-                    >
-                      {spec.coverage_filled} / {spec.coverage_total}
-                    </p>
+                    {/* 항목 수는 대화마다 다르다. 체크리스트가 없는 대화는 분모가 0 이다 */}
+                    {spec.coverage_total > 0 ? (
+                      <p
+                        className={
+                          spec.coverage_filled < spec.coverage_total ? "text-status-error" : "text-label-strong"
+                        }
+                      >
+                        {spec.coverage_filled} / {spec.coverage_total}
+                      </p>
+                    ) : (
+                      <p className="text-label-alternative">-</p>
+                    )}
                   </TableCell>
                   <TableCell className={border()}>{spec.content_length.toLocaleString()}자</TableCell>
                   <TableCell className={border()}>{formattedDate(spec.created_at)}</TableCell>
@@ -92,7 +100,7 @@ export default function SpecListTable({
                         onClick={() => setOpenedSpecId(spec.id)}
                         className="border text-label-strong border-line-strong text-title-xs rounded-[6px] py-1 px-[17px]"
                       >
-                        명세 보기
+                        결과 보기
                       </button>
                       <Link
                         href={`/code/${spec.code_id}`}
@@ -108,7 +116,7 @@ export default function SpecListTable({
           ) : (
             <TableRow>
               <TableCell colSpan={8} className="h-40 text-center">
-                생성된 명세가 없습니다.
+                생성된 결과물이 없습니다.
               </TableCell>
             </TableRow>
           )}
