@@ -29,6 +29,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
       grade: null,
       class_number: null,
       start_number: "1",
+      prompt_limit: "0",
     },
     mode: "onChange",
   });
@@ -56,6 +57,7 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
         class_number: vals.class_number,
         mode: vals.mode,
         start_number: vals.start_number,
+        prompt_limit: vals.prompt_limit,
       },
       handleCloseModal
     );
@@ -119,6 +121,21 @@ export default function CodeCreateModal({ skip, limit }: CodeCreateModalProps) {
               isValid={!formState.errors.start_number}
               validText={formState.errors.start_number?.message}
             />
+
+            <div>
+              <CustomInputField
+                type="number"
+                form={form}
+                name="prompt_limit"
+                placeholder="지급할 코인 개수를 입력하세요"
+                label="초기 코인"
+                isValid={!formState.errors.prompt_limit}
+                validText={formState.errors.prompt_limit?.message}
+              />
+              <p className="mt-2 text-body-2 text-label-alternative">
+                학생은 코인이 있어야 질문할 수 있습니다. 0으로 두면 쿠폰 코드를 따로 안내해야 합니다.
+              </p>
+            </div>
 
             {/* 관리자 메모 임시 주석 처리 */}
             {/* 

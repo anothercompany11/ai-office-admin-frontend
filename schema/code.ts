@@ -27,6 +27,10 @@ export const codeCreateSchema = z
       .string()
       .regex(/^[0-9]+$/, { message: "숫자만 입력 가능합니다." })
       .optional(),
+    prompt_limit: z
+      .string()
+      .regex(/^[0-9]+$/, { message: "숫자만 입력 가능합니다." })
+      .optional(),
   })
   .refine((data) => data.mode === "single" || (data.mode === "batch" && data.count !== undefined), {
     message: "단체 생성 시 개수를 입력해주세요.",

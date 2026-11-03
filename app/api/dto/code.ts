@@ -60,6 +60,7 @@ export interface CodeCreateReq {
   grade: string | null; // 학년
   class_number: string | null; // 반
   start_number: number; // 시작 번호
+  prompt_limit: number; // 발급 시 지급할 초기 코인
 }
 
 // 메시지

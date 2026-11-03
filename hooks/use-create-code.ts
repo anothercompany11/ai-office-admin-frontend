@@ -23,6 +23,7 @@ export default function useGenerateCodes(skip: number, limit: number) {
         class_number: body.class_number ?? null,
         start_number: Number(body.start_number) ?? 1,
         count: body.mode === "batch" ? Number(body.count!) : 1,
+        prompt_limit: Number(body.prompt_limit ?? 0),
       };
       await generateCodes(payload);
 
