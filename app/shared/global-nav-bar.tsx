@@ -1,6 +1,6 @@
 "use client";
 
-import { ADMIN_ACCOUNT_PAGE, CODE_PAGE, LOGIN_PAGE, PASSWORD_RESET_PAGE } from "@/constants/path";
+import { ADMIN_ACCOUNT_PAGE, CODE_PAGE, LOGIN_PAGE, PASSWORD_RESET_PAGE, SPEC_PAGE } from "@/constants/path";
 import { usePostLogout } from "@/hooks/use-auth";
 import { cn } from "@/lib/utils";
 import { AdminInfo } from "@/util/storage";
@@ -42,6 +42,11 @@ const GlobalNavBar = ({ isCollapsed, adminInfo, onToggleCollapsed }: GlobalNavBa
       label: "코드 관리",
       icon: "link",
       path: CODE_PAGE,
+    },
+    {
+      label: "명세 관리",
+      icon: "file-text",
+      path: SPEC_PAGE,
     },
   ];
 

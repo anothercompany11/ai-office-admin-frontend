@@ -3,6 +3,9 @@ export const LOGIN_PAGE = "/login";
 // [코드 관리]
 export const CODE_PAGE = "/code";
 
+// [명세 관리]
+export const SPEC_PAGE = "/spec";
+
 // [기본 관리]
 export const SETTING_PAGE = "/setting"; // 기본 관리 페이지
 
