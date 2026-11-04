@@ -67,8 +67,7 @@ export default function SpecDetailModal({ specId, onClose }: SpecDetailModalProp
             {detail.checklist.length > 0 && (
               <details className="rounded-lg border border-line bg-background-alternative px-4 py-3">
                 <summary className="cursor-pointer text-subtitle-m text-label-strong">
-                  체크리스트 {detail.checklist.filter((item) => item.done).length} /{" "}
-                  {detail.checklist.length}
+                  체크리스트 {detail.checklist.filter((item) => item.done).length} / {detail.checklist.length}
                   {detail.checklist_revision > 1 && (
                     <span className="ml-2 text-body-2 text-status-error">
                       대화 중 방향이 {detail.checklist_revision - 1}번 바뀜
@@ -80,8 +79,7 @@ export default function SpecDetailModal({ specId, onClose }: SpecDetailModalProp
                   {detail.goal?.trim() && <p>목표 — {detail.goal}</p>}
                   {detail.deliverable_shape?.trim() && <p>결과물 모양 — {detail.deliverable_shape}</p>}
                   <p>
-                    버튼 문구 — {detail.deliverable_label || "-"} · 파일{" "}
-                    {detail.deliverable_file_name || "없음"}
+                    버튼 문구 — {detail.deliverable_label || "-"} · 파일 {detail.deliverable_file_name || "없음"}
                   </p>
                 </div>
 

@@ -2,9 +2,7 @@ import { apiFetch } from "@/util/fetch";
 import { SpecDetailRes, SpecListRes } from "./dto/spec";
 
 // 명세 목록 조회 (대화당 최신 버전 한 줄)
-export const getSpecList = (
-  params: { page?: number; limit?: number; keyword?: string; code_id?: string } = {}
-) => {
+export const getSpecList = (params: { page?: number; limit?: number; keyword?: string; code_id?: string } = {}) => {
   const { page = 1, limit = 20, keyword, code_id } = params;
 
   const query: Record<string, string> = {

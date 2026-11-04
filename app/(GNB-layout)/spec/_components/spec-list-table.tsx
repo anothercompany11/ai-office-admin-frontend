@@ -102,10 +102,7 @@ export default function SpecListTable({
                       >
                         결과 보기
                       </button>
-                      <Link
-                        href={`/code/${spec.code_id}`}
-                        className="text-title-xs text-label-alternative underline"
-                      >
+                      <Link href={`/code/${spec.code_id}`} className="text-title-xs text-label-alternative underline">
                         대화
                       </Link>
                     </div>
