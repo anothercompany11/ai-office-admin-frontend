@@ -30,9 +30,11 @@ const buttonVariants = cva(
   }
 );
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+// 헤리테지 절이 두 줄로 걸치면 prettier 버전에 따라 줄바꿈 위치가 달라져
+// 빌드의 lint 단계가 환경마다 다르게 실패한다. 한 줄에 들어가게 줄여 둔다.
+type ButtonVariants = VariantProps<typeof buttonVariants>;
+
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, ButtonVariants {
   asChild?: boolean;
   loading?: boolean; // 로딩 중인지 여부
   "data-state"?: "on" | "off" | "closed";
