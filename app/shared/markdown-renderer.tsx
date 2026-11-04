@@ -20,7 +20,6 @@ interface MarkdownRendererProps {
 // code 컴포넌트를 위한 타입 정의
 interface CodeComponentProps {
   node?: any;
-  inline?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
@@ -80,40 +79,16 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, isMob }) =
     blockquote: ({ ...props }: any) => (
       <blockquote className="border-l-4 border-gray-300 pl-4 italic my-3" {...props} />
     ),
-    // 코드 블록 구문 강조 및 복사 버튼 처리
-    code: ({ inline, children, ...props }: CodeComponentProps) => {
-      const content = String(children).replace(/\n$/, "");
-
-      // 인라인 코드 처리 - ChatGPT 스타일로 개선
-      if (inline) {
-        return (
-          <code
-            className="bg-gray-100 text-pink-500 dark:bg-gray-800 dark:text-pink-400 px-1 py-0.5 rounded text-sm font-mono"
-            {...props}
-          >
-            {children}
-          </code>
-        );
-      }
-
-      // 외부에서 코드 블록 내용이 한 줄인지 확인
-      const isSingleWord = !content.includes("\n") && content.trim().split(/\s+/).length === 1;
-
-      // 단일 단어나 짧은 코드는 인라인 스타일로 처리 (옵션)
-      if (isSingleWord && content.length < 20) {
-        return (
-          <code
-            className="bg-gray-100 text-pink-500 dark:bg-gray-800 dark:text-pink-400 px-1.5 py-0.5 rounded text-sm font-mono"
-            {...props}
-          >
-            {children}
-          </code>
-        );
-      }
-
-      // 코드 블록은 일반 코드 태그로 처리하지 않고, 대신 별도의 사용자 정의 요소로 대체
-      return null;
-    },
+    // 여기로 오는 것은 인라인 코드뿐이다. 코드 블록(``` 펜스·들여쓰기)은 아래 pre 가
+    // 자식에서 직접 내용을 꺼내 통째로 그린다.
+    //
+    // react-markdown 9 부터 inline 플래그를 넘겨주지 않는다. 플래그로 가르고 나머지를
+    // 버리면 백틱으로 감싼 말이 화면에서 통째로 사라진다.
+    code: ({ children }: CodeComponentProps) => (
+      <code className="bg-gray-100 text-pink-500 dark:bg-gray-800 dark:text-pink-400 px-1 py-0.5 rounded text-sm font-mono">
+        {children}
+      </code>
+    ),
     // 코드 블록을 위한 별도 컴포넌트 - pre 태그 안에서 처리하여 p 태그 내부에 div가 들어가는 문제 방지
     pre: ({ children }: any) => {
       // pre 태그의 자식 요소에서 code 태그와 언어 정보 추출
